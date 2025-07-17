@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Field, Input, Label } from '@headlessui/react';
 import { useGame } from '../contexts/GameContext';
-import { UserPlus, Users, Play, Trash2, Music2, Disc3, Radio } from 'lucide-react';
+import { UserPlus, Users, Play, Trash2 } from 'lucide-react';
 
 function GameSetup() {
   const { players, addPlayer, removePlayer, startGame } = useGame();

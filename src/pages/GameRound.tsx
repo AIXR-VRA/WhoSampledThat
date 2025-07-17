@@ -28,7 +28,7 @@ function GameRound() {
   const playerRef = useRef<{ [key: string]: YT.Player }>({});
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const autoPlayTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const tutorialRef = useRef<any>(null);
+  const tutorialRef = useRef<{ drive: () => void; destroy: () => void } | null>(null);
 
   // Load persistent round scores from localStorage on mount
   useEffect(() => {
@@ -189,7 +189,7 @@ function GameRound() {
         );
         
         if (tutorialRef.current) {
-          (window as any).driverObj = tutorialRef.current;
+          (window as { driverObj?: { drive: () => void; destroy: () => void } }).driverObj = tutorialRef.current;
           tutorialRef.current.drive();
         }
       };
@@ -217,6 +217,7 @@ function GameRound() {
       // Small delay to ensure everything is properly initialized
       setTimeout(() => playVideo('original'), 100);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playersReady, currentTrack, settings.autoPlayEnabled, settings.jingleEnabled, jinglePlaying, canPlayVideos, currentRound]);
 
   const fadeOutJingle = () => {

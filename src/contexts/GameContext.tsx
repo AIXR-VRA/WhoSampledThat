@@ -1,5 +1,14 @@
 import { createContext, useContext, useState, type ReactNode, useEffect, useCallback } from 'react';
 import tracklist from '../data/tracklist.json';
+import {
+  saveGameState,
+  loadGameState,
+  clearGameState,
+  saveTutorialState,
+  loadTutorialState,
+  defaultSettings,
+  type PersistedGameState
+} from '../lib/gameStorage';
 
 interface Player {
   id: number;
@@ -53,75 +62,6 @@ interface GameContextType {
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
-
-const STORAGE_KEY = 'whoSampledThatGame';
-const TUTORIAL_STORAGE_KEY = 'whoSampledThatTutorial';
-
-interface PersistedGameState {
-  players: Player[];
-  gamePhase: 'setup' | 'playing' | 'summary';
-  currentRound: number;
-  settings: GameSettings;
-}
-
-interface TutorialState {
-  hasCompletedTutorial: boolean;
-}
-
-const defaultSettings: GameSettings = {
-  jingleEnabled: true,
-  autoPlayEnabled: true,
-};
-
-const saveGameState = (state: PersistedGameState) => {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch (error) {
-    console.warn('Failed to save game state to localStorage:', error);
-  }
-};
-
-const loadGameState = (): PersistedGameState | null => {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      return JSON.parse(saved);
-    }
-  } catch (error) {
-    console.warn('Failed to load game state from localStorage:', error);
-  }
-  return null;
-};
-
-const clearGameState = () => {
-  try {
-    localStorage.removeItem(STORAGE_KEY);
-  } catch (error) {
-    console.warn('Failed to clear game state from localStorage:', error);
-  }
-};
-
-const saveTutorialState = (completed: boolean) => {
-  try {
-    const tutorialState: TutorialState = { hasCompletedTutorial: completed };
-    localStorage.setItem(TUTORIAL_STORAGE_KEY, JSON.stringify(tutorialState));
-  } catch (error) {
-    console.warn('Failed to save tutorial state to localStorage:', error);
-  }
-};
-
-const loadTutorialState = (): boolean => {
-  try {
-    const saved = localStorage.getItem(TUTORIAL_STORAGE_KEY);
-    if (saved) {
-      const tutorialState: TutorialState = JSON.parse(saved);
-      return tutorialState.hasCompletedTutorial;
-    }
-  } catch (error) {
-    console.warn('Failed to load tutorial state from localStorage:', error);
-  }
-  return false;
-};
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   // Initialize state from localStorage or defaults
