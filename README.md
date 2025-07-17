@@ -7,8 +7,8 @@
   
   *Test your music knowledge by identifying original samples and the songs that use them!*
 
-  [![Deploy to Cloudflare Workers](https://github.com/Daniel-AIXR/PersonalApps/actions/workflows/deploy.yml/badge.svg)](https://github.com/Daniel-AIXR/PersonalApps/actions/workflows/deploy.yml)
-  [![License: Private](https://img.shields.io/badge/License-Private-red.svg)](https://github.com/Daniel-AIXR/PersonalApps)
+  [![Deploy to Cloudflare Workers](https://github.com/AIXR-VRA/PersonalApps/actions/workflows/deploy.yml/badge.svg)](https://github.com/AIXR-VRA/PersonalApps/actions/workflows/deploy.yml)
+  [![License: Private](https://img.shields.io/badge/License-Private-red.svg)](https://github.com/AIXR-VRA/PersonalApps)
 </div>
 
 ## 🎮 About the Game
