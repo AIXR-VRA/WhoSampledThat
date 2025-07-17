@@ -7,8 +7,8 @@
   
   *Test your music knowledge by identifying original samples and the songs that use them!*
 
-  [![Deploy to Cloudflare Workers](https://github.com/YourUsername/PersonalApps/actions/workflows/deploy.yml/badge.svg)](https://github.com/YourUsername/PersonalApps/actions/workflows/deploy.yml)
-  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+  [![Deploy to Cloudflare Workers](https://github.com/Daniel-AIXR/PersonalApps/actions/workflows/deploy.yml/badge.svg)](https://github.com/Daniel-AIXR/PersonalApps/actions/workflows/deploy.yml)
+  [![License: Private](https://img.shields.io/badge/License-Private-red.svg)](https://github.com/Daniel-AIXR/PersonalApps)
 </div>
 
 ## 🎮 About the Game
@@ -50,7 +50,7 @@ Players compete in multiple rounds, earning points for correctly guessing the ar
 
 ## 🚀 Live Demo
 
-🔗 **[Play Now](https://your-app-url.workers.dev)** *(Replace with your actual Cloudflare Workers URL)*
+🔗 **[Play Now](http://whosampledthat.com/)** - *Live production deployment*
 
 ## 🛠️ Technology Stack
 
@@ -77,25 +77,19 @@ Players compete in multiple rounds, earning points for correctly guessing the ar
 - **Node.js 18+** (with npm)
 - **Git**
 
-### Quick Start
+### Local Development Setup
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/YourUsername/PersonalApps.git
-   cd PersonalApps
-   ```
-
-2. **Install dependencies**
+1. **Install dependencies**
    ```bash
    npm install
    ```
 
-3. **Start development server**
+2. **Start development server**
    ```bash
    npm run dev
    ```
 
-4. **Open your browser**
+3. **Open your browser**
    Navigate to `http://localhost:5173` to see the game in action!
 
 ### Available Scripts
@@ -237,44 +231,31 @@ To add new tracks to the game, edit `src/data/tracklist.json`:
 - **`startTime`**: When to start playback (seconds)
 - **`duration`**: How long to play (seconds) - optional
 
-## 🤝 Contributing
+## 💻 Development Highlights
 
-We welcome contributions! Here's how to get started:
+This project showcases modern web development practices and technologies:
 
-### Development Workflow
+### Technical Architecture
+- **Component-Based Design**: Modular React components with TypeScript
+- **State Management**: Context API with persistent local storage
+- **Performance Optimization**: Vite for fast builds and development
+- **Responsive Design**: Mobile-first approach with Tailwind CSS
 
-1. **Fork the repository**
-2. **Create a feature branch**
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-3. **Make your changes**
-4. **Test thoroughly**
-   ```bash
-   npm run lint
-   npm run build
-   ```
-5. **Submit a pull request**
+### Code Quality Standards
+- **TypeScript** for type safety and better developer experience
+- **ESLint** for consistent code quality and style
+- **Modern React Patterns**: Hooks, Context, and functional components
+- **Accessibility**: ARIA-compliant components with HeadlessUI
 
-### Code Style
-
-- **TypeScript** for type safety
-- **ESLint** for code quality
-- **Tailwind CSS** for styling
-- **React best practices** and hooks
-
-### Areas for Contribution
-
-- 🎵 **New Tracks**: Add more sample pairs to the tracklist
-- 🎨 **UI Improvements**: Enhance animations and visual effects
-- 🔊 **Audio Features**: Advanced playback controls
-- 📱 **Mobile Optimization**: Touch gestures and mobile UX
-- 🌐 **Localization**: Multi-language support
-- 🏆 **Leaderboards**: Persistent high scores
+### Production Features
+- **Automated CI/CD**: GitHub Actions deployment pipeline
+- **Edge Computing**: Cloudflare Workers for global performance
+- **Progressive Enhancement**: Works offline with cached assets
+- **Error Handling**: Graceful fallbacks for audio playback issues
 
 ## 📄 License
 
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+This is **private code** - All rights reserved. This project is for portfolio demonstration purposes.
 
 ## 🎤 Acknowledgments
 
@@ -290,5 +271,5 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
   
   <br><br>
   
-  **[🎮 Play Now](https://your-app-url.workers.dev)** | **[📱 Mobile Version](https://your-app-url.workers.dev)** | **[🐛 Report Issues](https://github.com/YourUsername/PersonalApps/issues)**
+  **[🎮 Play Live Game](http://whosampledthat.com/)** | **[📱 Mobile Optimized](http://whosampledthat.com/)** | **[💼 Developer Portfolio](http://whosampledthat.com/)**
 </div>
