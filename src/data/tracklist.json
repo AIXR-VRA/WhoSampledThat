@@ -1,0 +1,307 @@
+[
+  {
+    "originalSample": {
+      "artist": "The Chi-Lites",
+      "trackName": "Are You My Woman (Tell Me So)",
+      "youtubeVideoId": "IEZAC9B7MFQ",
+      "startTime": 0,
+      "duration": 15
+    },
+    "newSong": {
+      "artist": "Beyoncé",
+      "trackName": "Crazy In Love",
+      "youtubeVideoId": "ViwtNLUqkMY"
+    }
+  },
+  {
+    "originalSample": {
+      "artist": "Nine Inch Nails",
+      "trackName": "34 Ghosts IV",
+      "youtubeVideoId": "XF_ceFugJjQ",
+      "startTime": 0,
+      "duration": 15
+    },
+    "newSong": {
+      "artist": "Lil Nas X",
+      "trackName": "Old Town Road",
+      "youtubeVideoId": "r7qovpFAGrQ"
+    }
+  },
+  {
+    "originalSample": {
+      "artist": "Edwin Birdsong",
+      "trackName": "Cola Bottle Baby",
+      "youtubeVideoId": "fiD39jo5Yo4",
+      "startTime": 0,
+      "duration": 15
+    },
+    "newSong": {
+      "artist": "Daft Punk",
+      "trackName": "Harder, Better, Faster, Stronger",
+      "youtubeVideoId": "gAjR4_CbPpQ"
+    }
+  },
+  {
+    "originalSample": {
+      "artist": "The Clash",
+      "trackName": "Straight to Hell",
+      "youtubeVideoId": "lpE2J11aLxo",
+      "startTime": 0,
+      "duration": 15
+    },
+    "newSong": {
+      "artist": "M.I.A.",
+      "trackName": "Paper Planes",
+      "youtubeVideoId": "ewRjZoRtu0Y"
+    }
+  },
+  {
+    "originalSample": {
+      "artist": "Lou Reed",
+      "trackName": "Walk On The Wild Side",
+      "youtubeVideoId": "oG6fayQBm9w",
+      "startTime": 0,
+      "duration": 15
+    },
+    "newSong": {
+      "artist": "A Tribe Called Quest",
+      "trackName": "Can I Kick It?",
+      "youtubeVideoId": "O3pyCGnZzYA"
+    }
+  },
+  {
+    "originalSample": {
+      "artist": "Diana Ross",
+      "trackName": "I'm Coming Out",
+      "youtubeVideoId": "3pmt-wWzC1E",
+      "startTime": 0,
+      "duration": 15
+    },
+    "newSong": {
+      "artist": "The Notorious B.I.G.",
+      "trackName": "Mo Money Mo Problems",
+      "youtubeVideoId": "gUhRKVIjJtw",
+      "startTime": 38
+    }
+  },
+  {
+    "originalSample": {
+      "artist": "Loleatta Holloway",
+      "trackName": "Love Sensation",
+      "youtubeVideoId": "1h6Su3t5Lqs",
+      "startTime": 60,
+      "duration": 15
+    },
+    "newSong": {
+      "artist": "Black Box",
+      "trackName": "Ride On Time",
+      "youtubeVideoId": "M0quXl_od3g"
+    }
+  },
+  {
+    "originalSample": {
+      "artist": "ABBA",
+      "trackName": "Gimme! Gimme! Gimme! (A Man After Midnight)",
+      "youtubeVideoId": "XEjLoHdbVeE",
+      "startTime": 0,
+      "duration": 15
+    },
+    "newSong": {
+      "artist": "Madonna",
+      "trackName": "Hung Up",
+      "youtubeVideoId": "EDwb9jOVRtU",
+      "startTime": 17
+    }
+  },
+  {
+    "originalSample": {
+      "artist": "Stevie Nicks",
+      "trackName": "Edge of Seventeen",
+      "youtubeVideoId": "3oZunnY-Cbs",
+      "startTime": 0,
+      "duration": 15
+    },
+    "newSong": {
+      "artist": "Destiny's Child",
+      "trackName": "Bootylicious",
+      "youtubeVideoId": "IyYnnUcgeMc"
+    }
+  },
+  {
+    "originalSample": {
+      "artist": "Camille Yarbrough",
+      "trackName": "Take Yo' Praise",
+      "youtubeVideoId": "sGQbtyctPmE",
+      "startTime": 0,
+      "duration": 15
+    },
+    "newSong": {
+      "artist": "Fatboy Slim",
+      "trackName": "Praise You",
+      "youtubeVideoId": "ruAi4VBoBSM",
+      "startTime": 6
+    }
+  },
+  {
+    "originalSample": {
+      "artist": "Chaka Khan",
+      "trackName": "Fate",
+      "youtubeVideoId": "S0NbcNc3HOk",
+      "startTime": 0,
+      "duration": 15
+    },
+    "newSong": {
+      "artist": "Stardust",
+      "trackName": "Music Sounds Better With You",
+      "youtubeVideoId": "FQlAEiCb8m0"
+    }
+  },
+  {
+    "originalSample": {
+      "artist": "Siffre",
+      "trackName": "I Got the",
+      "youtubeVideoId": "50eiiYyqG6k",
+      "startTime": 101,
+      "duration": 15
+    },
+    "newSong": {
+      "artist": "Eminem",
+      "trackName": "My Name Is",
+      "youtubeVideoId": "sNPnbI1arSE",
+      "startTime": 8
+    }
+  },
+  {
+    "originalSample": {
+      "artist": "Carlton Williams",
+      "trackName": "Prison Song",
+      "youtubeVideoId": "s6F37L7vtyw",
+      "startTime": 0,
+      "duration": 15
+    },
+    "newSong": {
+      "artist": "Future",
+      "trackName": "Mask Off",
+      "youtubeVideoId": "xvZqHgFz51I",
+      "startTime": 84
+    }
+  },
+  {
+    "originalSample": {
+      "artist": "Timmy Thomas",
+      "trackName": "Why Can't We Live Together",
+      "youtubeVideoId": "hULALx9PuXA",
+      "startTime": 0,
+      "duration": 15
+    },
+    "newSong": {
+      "artist": "Drake",
+      "trackName": "Hotline Bling",
+      "youtubeVideoId": "uxpDa-c-4Mc",
+      "startTime": 20
+    }
+  },
+  {
+    "originalSample": {
+      "artist": "Marvin Gaye",
+      "trackName": "Ain't No Mountain High Enough",
+      "youtubeVideoId": "ABfQuZqq8wg",
+      "startTime": 0,
+      "duration": 15
+    },
+    "newSong": {
+      "artist": "Amy Winehouse",
+      "trackName": "Tears Dry On Their Own",
+      "youtubeVideoId": "ojdbDYahiCQ"
+    }
+  },
+  {
+    "originalSample": {
+      "artist": "Curtis Mayfield",
+      "trackName": "Move On Up",
+      "youtubeVideoId": "A9RMr9KuVZo",
+      "startTime": 0,
+      "duration": 15
+    },
+    "newSong": {
+      "artist": "Kanye West",
+      "trackName": "Touch The Sky",
+      "youtubeVideoId": "YkwQbuAGLj4",
+      "startTime": 18
+    }
+  },
+  {
+    "originalSample": {
+      "artist": "Stevie Wonder",
+      "trackName": "Pastime Paradise",
+      "youtubeVideoId": "_H3Sv2zad6s",
+      "startTime": 0,
+      "duration": 20
+    },
+    "newSong": {
+      "artist": "Coolio",
+      "trackName": "Gangsta's Paradise",
+      "youtubeVideoId": "fPO76Jlnz6c",
+      "startTime": 14
+    }
+  },
+  {
+    "originalSample": {
+      "artist": "Barry White",
+      "trackName": "It's Ecstasy When You Lay Next To Me",
+      "youtubeVideoId": "dk5WCc1iEwk",
+      "startTime": 0,
+      "duration": 15
+    },
+    "newSong": {
+      "artist": "Robbie Williams",
+      "trackName": "Rock DJ",
+      "youtubeVideoId": "BnO3nijfYmU"
+    }
+  },
+  {
+    "originalSample": {
+      "artist": "Ray Charles",
+      "trackName": "I Got A Woman",
+      "youtubeVideoId": "CnI_LuCJ4Ek",
+      "startTime": 0,
+      "duration": 15
+    },
+    "newSong": {
+      "artist": "Kanye West Feat. Jamie Foxx",
+      "trackName": "Gold Digger",
+      "youtubeVideoId": "6vwNcNOTVzY",
+      "startTime": 6
+    }
+  },
+  {
+    "originalSample": {
+      "artist": "Rick James",
+      "trackName": "Super Freak",
+      "youtubeVideoId": "QYHxGBH6o4M",
+      "startTime": 0,
+      "duration": 15
+    },
+    "newSong": {
+      "artist": "MC Hammer",
+      "trackName": "U Can't Touch This",
+      "youtubeVideoId": "otCpCn0l4Wo",
+      "startTime": 16
+    }
+  },
+  {
+    "originalSample": {
+      "artist": "The Isley Brothers",
+      "trackName": "That Lady",
+      "youtubeVideoId": "S1Mvy3E8P2U",
+      "startTime": 0,
+      "duration": 15
+    },
+    "newSong": {
+      "artist": "Kendrick Lamar",
+      "trackName": "i",
+      "youtubeVideoId": "8aShfolR6w8",
+      "startTime": 47
+    }
+  }
+]
