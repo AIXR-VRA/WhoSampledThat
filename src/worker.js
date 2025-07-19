@@ -190,7 +190,10 @@ async function generateShareImage(baseImageBuffer, scores) {
     // Import the ImageResponse from workers-og (the correct library for Cloudflare Workers)
     const { ImageResponse } = await import('workers-og');
     
-    // Create JSX component for the OG image using workers-og
+    // Convert base image buffer to base64 for use as background
+    const base64Image = Buffer.from(baseImageBuffer).toString('base64');
+    
+    // Create JSX component that overlays scores on the base image
     const jsx = {
       type: 'div',
       props: {
@@ -198,121 +201,88 @@ async function generateShareImage(baseImageBuffer, scores) {
           height: '630px',
           width: '1200px',
           display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#1f2937',
-          background: 'linear-gradient(135deg, #1f2937 0%, #374151 100%)',
-          fontFamily: 'Arial, sans-serif',
-          color: '#FFFFFF',
-          padding: '40px'
+          backgroundImage: `url(data:image/png;base64,${base64Image})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          position: 'relative',
+          fontFamily: 'Arial, sans-serif'
         },
         children: [
-          // Title
+          // Safe zone container (right side red area)
           {
             type: 'div',
             props: {
               style: {
-                fontSize: '48px',
-                fontWeight: 'bold',
-                marginBottom: '40px',
-                textAlign: 'center'
-              },
-              children: '🎵 Who Sampled That? 🎵'
-            }
-          },
-          // Subtitle
-          {
-            type: 'div',
-            props: {
-              style: {
-                fontSize: '36px',
-                fontWeight: 'bold',
-                marginBottom: '50px',
-                color: '#FFD700',
-                textAlign: 'center'
-              },
-              children: 'FINAL SCORES! 🏆'
-            }
-          },
-          // Scores container
-          {
-            type: 'div',
-            props: {
-              style: {
+                position: 'absolute',
+                right: '0px',
+                top: '0px',
+                width: '620px', // Width of red safe zone
+                height: '630px',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '25px',
                 alignItems: 'center',
-                width: '100%'
+                justifyContent: 'center',
+                padding: '40px'
               },
-              children: scores.slice(0, 3).map((player, index) => {
-                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
-                return {
+              children: [
+                // Just the scores - clean and simple
+                {
                   type: 'div',
-                  key: index,
                   props: {
                     style: {
                       display: 'flex',
+                      flexDirection: 'column',
+                      gap: '30px',
                       alignItems: 'center',
-                      justifyContent: 'space-between',
-                      width: '600px',
-                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                      padding: '20px 30px',
-                      borderRadius: '15px',
-                      fontSize: '32px',
-                      fontWeight: 'bold'
+                      width: '100%'
                     },
-                    children: [
-                      {
+                    children: scores.slice(0, 3).map((player, index) => {
+                      const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
+                      return {
                         type: 'div',
+                        key: index,
                         props: {
                           style: {
                             display: 'flex',
+                            flexDirection: 'column',
                             alignItems: 'center',
-                            gap: '15px'
+                            textAlign: 'center',
+                            color: '#FFFFFF',
+                            textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
                           },
                           children: [
+                            // Medal and name
                             {
-                              type: 'span',
+                              type: 'div',
                               props: {
-                                style: { fontSize: '40px' },
-                                children: medal
+                                style: {
+                                  fontSize: '36px',
+                                  fontWeight: 'bold',
+                                  marginBottom: '8px'
+                                },
+                                children: `${medal} ${player.name}`
                               }
                             },
+                            // Score
                             {
-                              type: 'span',
+                              type: 'div',
                               props: {
-                                children: player.name
+                                style: {
+                                  fontSize: '28px',
+                                  fontWeight: 'bold',
+                                  color: '#FFD700',
+                                  textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                                },
+                                children: `${player.score} pts`
                               }
                             }
                           ]
                         }
-                      },
-                      {
-                        type: 'span',
-                        props: {
-                          style: { color: '#FFD700' },
-                          children: `${player.score} pts`
-                        }
-                      }
-                    ]
+                      };
+                    })
                   }
-                };
-              })
-            }
-          },
-          // Footer
-          {
-            type: 'div',
-            props: {
-              style: {
-                fontSize: '24px',
-                marginTop: '50px',
-                color: '#9CA3AF',
-                textAlign: 'center'
-              },
-              children: 'Play at whosampledthat.com'
+                }
+              ]
             }
           }
         ]
