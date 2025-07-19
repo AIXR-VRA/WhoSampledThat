@@ -109,7 +109,7 @@ function FinalScoresLeaderboard() {
     
     const shareData = {
       title: 'Who Sampled That? - Game Results! 🎵',
-      text: `Check out these amazing scores from our music guessing game! ${top3Players.map(p => `${p.name}: ${p.score} pts`).join(', ')}`,
+      text: `Check out these amazing scores from our music party game! ${top3Players.map(p => `${p.name}: ${p.score} pts`).join(', ')}`,
       url: shareUrl
     };
 

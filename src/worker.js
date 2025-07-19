@@ -151,6 +151,22 @@ async function handleSharePage(request, env) {
   }
 }
 
+// Detect if platform prefers square images
+function prefersPlatformSquareImage(userAgent) {
+  const ua = userAgent?.toLowerCase() || '';
+  
+  // WhatsApp and platforms that prefer square
+  const squarePlatforms = [
+    'whatsapp',
+    'instagram', 
+    'snapchat',
+    'discord',
+    'telegram'
+  ];
+  
+  return squarePlatforms.some(platform => ua.includes(platform));
+}
+
 async function handleShareImage(request, env) {
   try {
     console.log('🎨 OG_IMAGE_GENERATION_START');
@@ -169,14 +185,20 @@ async function handleShareImage(request, env) {
       return new Response('Invalid share ID', { status: 400 });
     }
     
-    console.log('📥 OG_FETCHING_BASE_IMAGE');
+    // Detect platform and choose appropriate image format
+    const userAgent = request.headers.get('User-Agent');
+    const useSquare = prefersPlatformSquareImage(userAgent);
+    const baseImageName = useSquare ? 'social-share-card-base-square.png' : 'social-share-card-base.png';
     
-    // Get the base image from assets (square version)
-    const baseImageRequest = new Request(new URL('/social-share-card-base-square.png', request.url));
+    console.log('🔍 OG_PLATFORM_DETECTION:', { userAgent, useSquare, baseImageName });
+    console.log('📥 OG_FETCHING_BASE_IMAGE:', baseImageName);
+    
+    // Get the appropriate base image from assets
+    const baseImageRequest = new Request(new URL(`/${baseImageName}`, request.url));
     const baseImageResponse = await env.ASSETS.fetch(baseImageRequest);
     
     if (!baseImageResponse.ok) {
-      console.error('❌ OG_BASE_IMAGE_NOT_FOUND');
+      console.error('❌ OG_BASE_IMAGE_NOT_FOUND:', baseImageName);
       return new Response('Base image not found', { status: 404 });
     }
     
@@ -185,7 +207,7 @@ async function handleShareImage(request, env) {
     
     // Generate the dynamic image with scores
     console.log('🖼️ OG_GENERATING_IMAGE');
-    const generatedImage = await generateShareImage(baseImageBuffer, scores);
+    const generatedImage = await generateShareImage(baseImageBuffer, scores, useSquare);
     console.log('✅ OG_IMAGE_GENERATED:', generatedImage.byteLength, 'bytes');
     
     return new Response(generatedImage, {
@@ -193,7 +215,8 @@ async function handleShareImage(request, env) {
         'Content-Type': 'image/png',
         'Cache-Control': 'public, max-age=3600', // Cache for 1 hour
         'X-Content-Type-Options': 'nosniff',
-        'X-Generated-At': new Date().toISOString()
+        'X-Generated-At': new Date().toISOString(),
+        'X-Format-Used': useSquare ? 'square' : 'rectangle'
       }
     });
     
@@ -204,21 +227,26 @@ async function handleShareImage(request, env) {
   }
 }
 
-async function generateShareImage(baseImageBuffer, scores) {
+async function generateShareImage(baseImageBuffer, scores, useSquare = false) {
   try {
+    console.log('🎨 OG_GENERATING_WITH_FORMAT:', useSquare ? 'square' : 'rectangle');
+    
     // Import the ImageResponse from workers-og (the correct library for Cloudflare Workers)
     const { ImageResponse } = await import('workers-og');
     
     // Convert base image to base64 for background
     const base64Image = `data:image/png;base64,${btoa(String.fromCharCode(...new Uint8Array(baseImageBuffer)))}`;
     
-    // Create JSX component with square base image background and centered scores
+    // Set dimensions based on format
+    const dimensions = useSquare ? { width: 1080, height: 1080 } : { width: 1920, height: 1080 };
+    
+    // Create JSX component with base image background and scores
     const jsx = {
       type: 'div',
       props: {
         style: {
-          height: '1080px',
-          width: '1080px',
+          height: `${dimensions.height}px`,
+          width: `${dimensions.width}px`,
           display: 'flex',
           position: 'relative',
           backgroundImage: `url(${base64Image})`,
@@ -227,37 +255,57 @@ async function generateShareImage(baseImageBuffer, scores) {
           fontFamily: 'Arial, sans-serif'
         },
         children: [
-          // Centered scores container for square format
+          // Scores container - centered for square, right-side for rectangle
           {
             type: 'div',
             props: {
-              style: {
+              style: useSquare ? {
+                // Square layout - centered
                 position: 'absolute',
                 left: '50%',
                 top: '50%',
                 transform: 'translate(-50%, -50%)',
-                width: '700px',
+                width: '800px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '40px'
+              } : {
+                // Rectangle layout - right side
+                position: 'absolute',
+                right: '80px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '800px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '50px'
               },
               children: scores.slice(0, 3).map((player, index) => {
-                const medal = index === 0 ? '1st' : index === 1 ? '2nd' : '3rd';
+                const position = index === 0 ? '1st' : index === 1 ? '2nd' : '3rd';
+                const isWinner = index === 0;
+                
                 return {
                   type: 'div',
                   key: index,
                   props: {
                     style: {
                       display: 'flex',
-                      flexDirection: 'column',
                       alignItems: 'center',
-                      textAlign: 'center',
-                      backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                      padding: '35px',
-                      borderRadius: '25px',
-                      width: '100%'
+                      justifyContent: 'space-between',
+                      width: '100%',
+                      // Match leaderboard gradient style
+                      background: isWinner 
+                        ? 'linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 165, 0, 0.2) 100%)'
+                        : 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                      border: isWinner ? '2px solid rgba(255, 215, 0, 0.5)' : '1px solid rgba(255, 255, 255, 0.2)',
+                      padding: '20px 30px',
+                      borderRadius: '20px',
+                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                      backdropFilter: 'blur(10px)'
                     },
                     children: [
                       {
@@ -266,28 +314,30 @@ async function generateShareImage(baseImageBuffer, scores) {
                           style: {
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '20px',
-                            marginBottom: '15px'
+                            gap: '20px'
                           },
                           children: [
                             {
                               type: 'div',
                               props: {
                                 style: {
-                                  fontSize: '70px'
+                                  fontSize: '50px',
+                                  fontWeight: 'bold',
+                                  color: isWinner ? '#FFD700' : '#FFFFFF',
+                                  textShadow: '2px 2px 8px rgba(0,0,0,0.8)',
+                                  minWidth: '80px'
                                 },
-                                children: medal
+                                children: position
                               }
                             },
                             {
                               type: 'div',
                               props: {
                                 style: {
-                                  fontSize: '60px',
+                                  fontSize: '48px',
                                   fontWeight: 'bold',
-                                  color: '#FFFFFF',
-                                  textShadow: '3px 3px 6px rgba(0,0,0,0.8)'
+                                  color: isWinner ? '#FFFFFF' : '#FFFFFF',
+                                  textShadow: '2px 2px 8px rgba(0,0,0,0.8)'
                                 },
                                 children: player.name
                               }
@@ -302,8 +352,7 @@ async function generateShareImage(baseImageBuffer, scores) {
                             fontSize: '48px',
                             fontWeight: 'bold',
                             color: '#FFD700',
-                            textShadow: '3px 3px 6px rgba(0,0,0,0.8)',
-                            textAlign: 'center'
+                            textShadow: '2px 2px 8px rgba(0,0,0,0.8)'
                           },
                           children: `${player.score} pts`
                         }
@@ -320,8 +369,8 @@ async function generateShareImage(baseImageBuffer, scores) {
 
     // Generate the image using ImageResponse from workers-og
     const response = new ImageResponse(jsx, {
-      width: 1080,
-      height: 1080,
+      width: dimensions.width,
+      height: dimensions.height,
     });
     
     return await response.arrayBuffer();
