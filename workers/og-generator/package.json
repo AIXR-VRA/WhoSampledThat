@@ -1,0 +1,16 @@
+{
+  "name": "who-sampled-that-og-generator",
+  "version": "1.0.0",
+  "description": "Dedicated OG image generator worker for Who Sampled That game",
+  "main": "worker.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler publish"
+  },
+  "dependencies": {
+    "workers-og": "^1.0.0"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+} 

@@ -1,0 +1,10 @@
+name = "who-sampled-that-og-generator"
+main = "worker.js"
+compatibility_date = "2025-01-17"
+
+# This worker handles ONLY OG image generation
+[vars]
+WORKER_TYPE = "og-generator"
+
+# Route configuration - will be called by main worker
+# Remove routes - we'll handle this through explicit calls from main worker 
