@@ -5,7 +5,7 @@ import SettingsDropdown from './components/SettingsDropdown';
 import InfoDropdown from './components/InfoDropdown';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
-import { LogOut, AlertTriangle, Trophy, Sparkles } from 'lucide-react';
+import { LogOut, AlertTriangle, Trophy, Sparkles, Share2 } from 'lucide-react';
 import { useState, memo, useMemo } from 'react';
 import logoImage from './assets/who sampled that logo small.png';
 
@@ -81,6 +81,46 @@ function FinalScoresLeaderboard() {
     resetGame();
   };
 
+  const handleShare = async () => {
+    const top3Players = playersWithPositions.slice(0, 3);
+    const scoresData = top3Players.map(player => ({
+      name: player.name,
+      score: player.score,
+      position: player.position
+    }));
+    
+    const encodedScores = encodeURIComponent(JSON.stringify(scoresData));
+    const shareImageUrl = `${window.location.origin}/api/share-image?scores=${encodedScores}`;
+    const gameUrl = window.location.origin;
+    
+    const shareData = {
+      title: 'Who Sampled That? - Game Results! 🎵',
+      text: `Check out these amazing scores from our music guessing game! ${top3Players.map(p => `${p.name}: ${p.score} pts`).join(', ')}`,
+      url: gameUrl
+    };
+
+    try {
+      if (navigator.share && navigator.canShare?.(shareData)) {
+        await navigator.share(shareData);
+      } else {
+        // Fallback to copying URL
+        await navigator.clipboard.writeText(`${shareData.text}\n\nPlay at: ${gameUrl}\n\nShare image: ${shareImageUrl}`);
+        // You could show a toast notification here
+        alert('Game results copied to clipboard! 📋');
+      }
+    } catch (error) {
+      // Fallback for any sharing errors
+      const shareText = `${shareData.text}\n\nPlay at: ${gameUrl}`;
+      try {
+        await navigator.clipboard.writeText(shareText);
+        alert('Game results copied to clipboard! 📋');
+      } catch (clipboardError) {
+        // Final fallback - show share info in alert
+        alert(`${shareText}\n\nShare this with your friends!`);
+      }
+    }
+  };
+
   const getPositionDisplay = (position: number) => {
     switch (position) {
       case 1: return '🥇';
@@ -134,7 +174,14 @@ function FinalScoresLeaderboard() {
           ))}
         </div>
         
-        <div className="mt-10 flex justify-center gap-6">
+        <div className="mt-10 flex justify-center gap-4 flex-wrap">
+          <Button 
+            onClick={handleShare}
+            className="modern-button warning px-6 py-4 text-lg font-bold flex items-center gap-2"
+          >
+            <Share2 className="w-5 h-5" />
+            📊 Share Results
+          </Button>
           <Button 
             onClick={handlePlayAgain}
             className="modern-button success px-8 py-4 text-lg font-bold"
