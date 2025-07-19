@@ -276,7 +276,7 @@ function AppHeader() {
           <div className="flex items-center justify-center">
             <img 
               src={logoImage} 
-              alt="Who Sampled That - The Ultimate Music Guessing Game" 
+              alt="Who Sampled That - The Ultimate Music Party Game" 
               className={logoClasses}
             />
           </div>

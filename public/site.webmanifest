@@ -1,5 +1,5 @@
 {
-  "name": "Who Sampled That? - The Ultimate Music Guessing Game",
+      "name": "Who Sampled That? - The Ultimate Music Party Game",
   "short_name": "Who Sampled That?",
   "description": "Test your music knowledge by identifying original samples and the songs that use them. Play with friends, compete for points, and discover musical connections.",
   "start_url": "/",
@@ -43,7 +43,7 @@
     {
       "name": "Start New Game",
       "short_name": "New Game",
-      "description": "Start a new music guessing game",
+                  "description": "Start a new music party game",
       "url": "/",
       "icons": [
         {

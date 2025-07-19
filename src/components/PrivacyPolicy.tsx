@@ -32,7 +32,7 @@ export default function PrivacyPolicy({ isOpen, onClose }: PrivacyPolicyProps) {
             <section>
               <h2 className="text-xl font-bold text-white mb-3">1. About This Service</h2>
               <p>
-                "Who Sampled That?" is a music guessing game provided as-is for entertainment purposes. 
+                "Who Sampled That?" is a music party game provided as-is for entertainment purposes. 
                 This service is not owned or operated by any company and is provided by an individual developer.
               </p>
             </section>

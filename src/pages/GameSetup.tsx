@@ -36,7 +36,7 @@ function GameSetup() {
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8">
           <div className="flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-            <h2 className="shrikhand-regular text-2xl sm:text-3xl text-white">The Ultimate Music Guessing Game</h2>
+            <h2 className="shrikhand-regular text-2xl sm:text-3xl text-white">The Ultimate Music Party Game</h2>
           </div>
           <p className="text-gray-400 text-base sm:text-lg">Who's ready to guess some samples? 🎵</p>
         </div>

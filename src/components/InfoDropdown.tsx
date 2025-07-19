@@ -46,7 +46,7 @@ export default function InfoDropdown() {
             <div className="space-y-3 md:space-y-4 mb-4 md:mb-6">
               <div className="text-gray-300 leading-relaxed">
                 <p className="mb-2 md:mb-3 text-sm md:text-base">
-                  <strong className="text-white">🎵 Who Sampled That</strong> is the ultimate music guessing game!
+                  <strong className="text-white">🎵 Who Sampled That</strong> is the ultimate music party game!
                 </p>
                 <p className="mb-2 md:mb-3 text-sm md:text-base">
                   Listen to an <strong>original sample</strong> and a <strong>new song</strong> that uses it. 

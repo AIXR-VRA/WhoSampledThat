@@ -3,7 +3,7 @@
 <div align="center">
   <img src="src/assets/who sampled that logo small.png" alt="Who Sampled That Logo" width="200"/>
   
-  **The Ultimate Music Guessing Game**
+  **The Ultimate Music Party Game**
   
   *Test your music knowledge by identifying original samples and the songs that use them!*
 
@@ -13,12 +13,12 @@
 
 ## 🎮 About the Game
 
-"Who Sampled That?" is an interactive music guessing game that challenges players to identify:
+"Who Sampled That?" is the perfect party game for music lovers! Gather your friends and compete to see who has the best music knowledge. Challenge each other to identify:
 - **Original Sample**: The source track that was sampled
 - **New Track**: The modern song that uses the sample
 - **Artist Names**: Who performed each track
 
-Players compete in multiple rounds, earning points for correctly guessing the artist, track name, and identifying the sample connection. The game features a beautiful retro-inspired UI with animated musical notes, YouTube integration for audio playback, and a comprehensive tutorial system for new players.
+Perfect for game nights, parties, or hanging out with friends, players compete in multiple rounds, earning points for correctly guessing the artist, track name, and identifying the sample connection. The game features a beautiful retro-inspired UI with animated musical notes, YouTube integration for audio playback, and a comprehensive tutorial system for new players.
 
 ## ✨ Features
 
@@ -230,6 +230,94 @@ To add new tracks to the game, edit `src/data/tracklist.json`:
 - **`youtubeVideoId`**: Extract from YouTube URL (e.g., `dQw4w9WgXcQ`)
 - **`startTime`**: When to start playback (seconds)
 - **`duration`**: How long to play (seconds) - optional
+
+## 🖼️ Dynamic Share Image Generation
+
+The game features a sophisticated Open Graph (OG) image generation system that creates custom share images for social media platforms when players share their scores.
+
+### How It Works
+
+#### 1. Share URL Generation
+When players share their scores, the game generates a unique share URL in the format:
+```
+https://whosampledthat.com/share/{shareId}
+```
+
+The `shareId` is a URL-safe base64 encoded string containing player scores in a compact format:
+```
+Format: "name1:score1,name2:score2,name3:score3"
+Example: "Alice:15,Bob:12,Charlie:8" → encoded → "QWxpY2U6MTUsQm9iOjEyLENoYXJsaWU6OA"
+```
+
+#### 2. Dynamic Meta Tag Injection
+When a share URL is accessed:
+- The Cloudflare Worker intercepts the request
+- Decodes the share ID to extract player scores
+- Dynamically generates Open Graph and Twitter Card meta tags
+- Injects custom meta tags with player-specific content into the HTML
+
+#### 3. Custom Image Generation
+The system generates unique OG images at `/api/share-image/{shareId}`:
+- **Base Image**: Uses `social-share-card-base-square.png` (1080x1080px)
+- **Dynamic Overlay**: Top 3 players with scores overlaid using `workers-og` library
+- **Format**: Square format (1080x1080) for optimal social media compatibility
+- **Caching**: Generated images are cached for 1 hour to improve performance
+
+#### 4. Technical Implementation
+
+**Share ID Encoding/Decoding:**
+```javascript
+// Encode scores to share ID
+const scoreString = players.map(p => `${p.name}:${p.score}`).join(',');
+const shareId = btoa(scoreString).replace(/\+/g, '-').replace(/\//g, '_');
+
+// Decode share ID back to scores
+const decoded = atob(shareId.replace(/-/g, '+').replace(/_/g, '/'));
+```
+
+**Dynamic Meta Tags:**
+```html
+<!-- Generated for each share -->
+<meta property="og:title" content="Who Sampled That? - Game Results! 🎵">
+<meta property="og:description" content="🥇 Alice: 15 pts | 🥈 Bob: 12 pts | 🥉 Charlie: 8 pts">
+<meta property="og:image" content="https://whosampledthat.com/api/share-image/{shareId}">
+<meta property="og:image:width" content="1080">
+<meta property="og:image:height" content="1080">
+```
+
+**Image Generation Process:**
+1. **Base Image Loading**: Fetches the square base image from assets
+2. **JSX Component Creation**: Builds a React-like component with scores overlay
+3. **Image Rendering**: Uses `workers-og` to render the component as PNG
+4. **Error Handling**: Falls back to base image if generation fails
+
+#### 5. Performance & Reliability Features
+
+- **Caching Strategy**: Generated images cached for 1 hour, share pages for 5 minutes
+- **Error Handling**: Graceful fallbacks to original homepage if share ID is invalid
+- **Format Optimization**: Square images work best across all social platforms
+- **Compression**: Efficient base64 encoding keeps share URLs short
+
+### Social Media Integration
+
+The generated images work seamlessly with:
+- **Facebook**: Displays custom image with player scores
+- **Twitter**: Rich media cards with game results
+- **Discord**: Embedded previews with leaderboard
+- **LinkedIn**: Professional sharing with results
+- **WhatsApp**: Preview images in chat
+
+### File Structure for OG Generation
+
+```
+PersonalApps/
+├── src/worker.js              # Main worker with OG generation logic
+├── public/
+│   └── social-share-card-base-square.png  # Base image template
+└── wrangler.toml             # Cloudflare Workers configuration
+```
+
+This system enables rich social sharing experiences, allowing players to showcase their music knowledge with visually appealing, automatically generated scoreboard images.
 
 ## 💻 Development Highlights
 
