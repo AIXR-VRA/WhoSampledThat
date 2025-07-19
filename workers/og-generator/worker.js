@@ -69,8 +69,8 @@ async function handleOgImageGeneration(request, env) {
     
     console.log('OG Generator: Successfully decoded scores for', scores.length, 'players');
     
-    // Get the base image - we'll fetch it from the main domain
-    const baseImageUrl = `${url.protocol}//${url.hostname}/social-share-card-base.png`;
+    // Get the base image - we'll fetch it from the main domain (square version)
+    const baseImageUrl = `${url.protocol}//${url.hostname}/social-share-card-base-square.png`;
     console.log('OG Generator: Fetching base image from:', baseImageUrl);
     
     const baseImageResponse = await fetch(baseImageUrl);
@@ -127,13 +127,13 @@ async function generateShareImage(baseImageBuffer, scores) {
     const base64Image = `data:image/png;base64,${btoa(String.fromCharCode(...new Uint8Array(baseImageBuffer)))}`;
     console.log('OG Generator: Base image converted to base64, length:', base64Image.length);
     
-    // Create JSX component with base image background and scores in safe zone
+        // Create JSX component with square base image background and centered scores
     const jsx = {
       type: 'div',
       props: {
         style: {
-                   height: '1080px',
-         width: '1920px',
+          height: '1080px',
+          width: '1080px',
           display: 'flex',
           position: 'relative',
           backgroundImage: `url(${base64Image})`,
@@ -142,24 +142,24 @@ async function generateShareImage(baseImageBuffer, scores) {
           fontFamily: 'Arial, sans-serif'
         },
         children: [
-          // Safe zone container (right side red area)
+          // Centered scores container for square format
           {
             type: 'div',
             props: {
               style: {
                 position: 'absolute',
-                                 right: '80px',
-                 top: '50%',
-                 transform: 'translateY(-50%)',
-                 width: '800px',
+                left: '50%',
+                top: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: '700px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                                 gap: '50px'
+                gap: '40px'
               },
               children: scores.slice(0, 3).map((player, index) => {
-                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
+                                 const medal = index === 0 ? '1st' : index === 1 ? '2nd' : '3rd';
                 return {
                   type: 'div',
                   key: index,
@@ -174,43 +174,56 @@ async function generateShareImage(baseImageBuffer, scores) {
                        borderRadius: '25px',
                       width: '100%'
                     },
-                    children: [
-                      {
-                        type: 'div',
-                        props: {
-                          style: {
-                                                         fontSize: '80px',
-                             marginBottom: '10px'
-                          },
-                          children: medal
-                        }
-                      },
-                      {
-                        type: 'div',
-                        props: {
-                          style: {
-                                                         fontSize: '60px',
-                             fontWeight: 'bold',
-                             color: '#FFFFFF',
-                             textShadow: '3px 3px 6px rgba(0,0,0,0.8)',
-                             marginBottom: '10px'
-                          },
-                          children: player.name
-                        }
-                      },
-                      {
-                        type: 'div',
-                        props: {
-                          style: {
-                                                         fontSize: '48px',
+                                         children: [
+                       {
+                         type: 'div',
+                         props: {
+                           style: {
+                             display: 'flex',
+                             alignItems: 'center',
+                             justifyContent: 'center',
+                             gap: '20px',
+                             marginBottom: '15px'
+                           },
+                           children: [
+                             {
+                               type: 'div',
+                               props: {
+                                 style: {
+                                   fontSize: '70px'
+                                 },
+                                 children: medal
+                               }
+                             },
+                             {
+                               type: 'div',
+                               props: {
+                                 style: {
+                                   fontSize: '60px',
+                                   fontWeight: 'bold',
+                                   color: '#FFFFFF',
+                                   textShadow: '3px 3px 6px rgba(0,0,0,0.8)'
+                                 },
+                                 children: player.name
+                               }
+                             }
+                           ]
+                         }
+                       },
+                       {
+                         type: 'div',
+                         props: {
+                           style: {
+                             fontSize: '48px',
                              fontWeight: 'bold',
                              color: '#FFD700',
-                             textShadow: '3px 3px 6px rgba(0,0,0,0.8)'
-                          },
-                          children: `${player.score} pts`
-                        }
-                      }
-                    ]
+                             textShadow: '3px 3px 6px rgba(0,0,0,0.8)',
+                             textAlign: 'center'
+                           },
+                           children: `${player.score} pts`
+                         }
+                       }
+                     ]
                   }
                 };
               })
@@ -224,7 +237,7 @@ async function generateShareImage(baseImageBuffer, scores) {
 
          // Generate the image using ImageResponse from workers-og
      const response = new ImageResponse(jsx, {
-       width: 1920,
+       width: 1080,
        height: 1080,
      });
     
@@ -236,35 +249,7 @@ async function generateShareImage(baseImageBuffer, scores) {
     console.error('OG Generator: Error in generateShareImage:', error);
     console.error('OG Generator: Falling back to SVG');
     
-    // Fallback: return a clean SVG with the actual base image background
-    const fallbackSvg = `
-             <svg width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
-         <defs>
-           <pattern id="baseImage" patternUnits="userSpaceOnUse" width="1920" height="1080">
-             <image href="data:image/png;base64,${btoa(String.fromCharCode(...new Uint8Array(baseImageBuffer)))}" x="0" y="0" width="1920" height="1080"/>
-           </pattern>
-         </defs>
-         <rect width="1920" height="1080" fill="url(#baseImage)"/>
-         
-         <!-- Safe zone scores (right side) - scaled for 1920x1080 -->
-         <g transform="translate(1520, 540)">
-           ${scores.slice(0, 3).map((player, index) => {
-             const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
-             const y = (index - 1) * 160; // Center around 0, bigger spacing
-             return `
-               <g transform="translate(0, ${y})">
-                 <rect x="-320" y="-50" width="640" height="100" fill="rgba(0, 0, 0, 0.5)" rx="25"/>
-                 <text x="0" y="-15" font-family="Arial" font-size="52" fill="white" text-anchor="middle" font-weight="bold">${medal} ${player.name}</text>
-                 <text x="0" y="30" font-family="Arial" font-size="40" fill="#FFD700" text-anchor="middle" font-weight="bold">${player.score} pts</text>
-               </g>
-             `;
-           }).join('')}
-         </g>
-      </svg>
-    `;
-    
-    return new Response(fallbackSvg, {
-      headers: { 'Content-Type': 'image/svg+xml' }
-    }).arrayBuffer();
+        // Fallback: return the original base image without modifications
+    return baseImageBuffer;
   }
 } 

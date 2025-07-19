@@ -171,8 +171,8 @@ async function handleShareImage(request, env) {
     
     console.log('📥 OG_FETCHING_BASE_IMAGE');
     
-    // Get the base image from assets
-    const baseImageRequest = new Request(new URL('/social-share-card-base.png', request.url));
+    // Get the base image from assets (square version)
+    const baseImageRequest = new Request(new URL('/social-share-card-base-square.png', request.url));
     const baseImageResponse = await env.ASSETS.fetch(baseImageRequest);
     
     if (!baseImageResponse.ok) {
@@ -212,13 +212,13 @@ async function generateShareImage(baseImageBuffer, scores) {
     // Convert base image to base64 for background
     const base64Image = `data:image/png;base64,${btoa(String.fromCharCode(...new Uint8Array(baseImageBuffer)))}`;
     
-    // Create JSX component with base image background and scores in safe zone
+    // Create JSX component with square base image background and centered scores
     const jsx = {
       type: 'div',
       props: {
         style: {
           height: '1080px',
-          width: '1920px',
+          width: '1080px',
           display: 'flex',
           position: 'relative',
           backgroundImage: `url(${base64Image})`,
@@ -227,24 +227,24 @@ async function generateShareImage(baseImageBuffer, scores) {
           fontFamily: 'Arial, sans-serif'
         },
         children: [
-          // Safe zone container (right side red area) - scaled for 1920x1080
+          // Centered scores container for square format
           {
             type: 'div',
             props: {
               style: {
                 position: 'absolute',
-                right: '80px',
+                left: '50%',
                 top: '50%',
-                transform: 'translateY(-50%)',
-                width: '800px',
+                transform: 'translate(-50%, -50%)',
+                width: '700px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '50px'
+                gap: '40px'
               },
               children: scores.slice(0, 3).map((player, index) => {
-                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
+                const medal = index === 0 ? '1st' : index === 1 ? '2nd' : '3rd';
                 return {
                   type: 'div',
                   key: index,
@@ -264,23 +264,35 @@ async function generateShareImage(baseImageBuffer, scores) {
                         type: 'div',
                         props: {
                           style: {
-                            fontSize: '80px',
-                            marginBottom: '10px'
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '20px',
+                            marginBottom: '15px'
                           },
-                          children: medal
-                        }
-                      },
-                      {
-                        type: 'div',
-                        props: {
-                          style: {
-                            fontSize: '60px',
-                            fontWeight: 'bold',
-                            color: '#FFFFFF',
-                            textShadow: '3px 3px 6px rgba(0,0,0,0.8)',
-                            marginBottom: '10px'
-                          },
-                          children: player.name
+                          children: [
+                            {
+                              type: 'div',
+                              props: {
+                                style: {
+                                  fontSize: '70px'
+                                },
+                                children: medal
+                              }
+                            },
+                            {
+                              type: 'div',
+                              props: {
+                                style: {
+                                  fontSize: '60px',
+                                  fontWeight: 'bold',
+                                  color: '#FFFFFF',
+                                  textShadow: '3px 3px 6px rgba(0,0,0,0.8)'
+                                },
+                                children: player.name
+                              }
+                            }
+                          ]
                         }
                       },
                       {
@@ -290,7 +302,8 @@ async function generateShareImage(baseImageBuffer, scores) {
                             fontSize: '48px',
                             fontWeight: 'bold',
                             color: '#FFD700',
-                            textShadow: '3px 3px 6px rgba(0,0,0,0.8)'
+                            textShadow: '3px 3px 6px rgba(0,0,0,0.8)',
+                            textAlign: 'center'
                           },
                           children: `${player.score} pts`
                         }
@@ -307,45 +320,17 @@ async function generateShareImage(baseImageBuffer, scores) {
 
     // Generate the image using ImageResponse from workers-og
     const response = new ImageResponse(jsx, {
-      width: 1920,
+      width: 1080,
       height: 1080,
     });
     
     return await response.arrayBuffer();
   } catch (error) {
     console.error('❌ OG_WORKERS_OG_ERROR:', error);
-    console.log('🔄 OG_FALLBACK_TO_SVG');
+    console.log('🔄 OG_FALLBACK_TO_SIMPLE_PNG');
     
-    // Fallback: return a clean SVG with the actual base image background (1920x1080)
-    const fallbackSvg = `
-      <svg width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="baseImage" patternUnits="userSpaceOnUse" width="1920" height="1080">
-            <image href="data:image/png;base64,${btoa(String.fromCharCode(...new Uint8Array(baseImageBuffer)))}" x="0" y="0" width="1920" height="1080"/>
-          </pattern>
-        </defs>
-        <rect width="1920" height="1080" fill="url(#baseImage)"/>
-        
-        <!-- Safe zone scores (right side) - scaled for 1920x1080 -->
-        <g transform="translate(1520, 540)">
-          ${scores.slice(0, 3).map((player, index) => {
-            const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
-            const y = (index - 1) * 160; // Center around 0, bigger spacing
-            return `
-              <g transform="translate(0, ${y})">
-                <rect x="-320" y="-50" width="640" height="100" fill="rgba(0, 0, 0, 0.5)" rx="25"/>
-                <text x="0" y="-15" font-family="Arial" font-size="52" fill="white" text-anchor="middle" font-weight="bold">${medal} ${player.name}</text>
-                <text x="0" y="30" font-family="Arial" font-size="40" fill="#FFD700" text-anchor="middle" font-weight="bold">${player.score} pts</text>
-              </g>
-            `;
-          }).join('')}
-        </g>
-      </svg>
-    `;
-    
-    console.log('✅ OG_FALLBACK_SVG_GENERATED');
-    return new Response(fallbackSvg, {
-      headers: { 'Content-Type': 'image/svg+xml' }
-    }).arrayBuffer();
+    // Fallback: return the original base image without modifications
+    console.log('✅ OG_FALLBACK_BASE_IMAGE_RETURNED');
+    return baseImageBuffer;
   }
 } 
