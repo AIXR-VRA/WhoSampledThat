@@ -263,13 +263,13 @@ async function generateShareImage(baseImageBuffer, scores) {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
-                      background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 50%, rgba(30, 41, 59, 0.95) 100%)',
-                      padding: '25px 35px',
-                      borderRadius: '20px',
+                      backgroundColor: 'rgba(15, 23, 42, 0.85)', // Dark slate with more opacity to match player-card
+                      padding: '24px',
+                      borderRadius: '20px', // Slightly smaller radius to match modern-card
                       width: '100%',
-                      border: '1px solid rgba(148, 163, 184, 0.3)',
-                      backdropFilter: 'blur(10px)',
-                      boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2)'
+                      marginBottom: '24px',
+                      border: '1px solid rgba(255, 255, 255, 0.1)', // Subtle border like modern cards
+                      backdropFilter: 'blur(4px)' // Subtle blur effect
                     },
                     children: [
                       {
@@ -277,7 +277,8 @@ async function generateShareImage(baseImageBuffer, scores) {
                         props: {
                           style: {
                             display: 'flex',
-                            alignItems: 'center'
+                            alignItems: 'center',
+                            gap: '20px'
                           },
                           children: [
                             {
@@ -285,12 +286,24 @@ async function generateShareImage(baseImageBuffer, scores) {
                               props: {
                                 style: {
                                   fontSize: '48px',
-                                  fontWeight: '900',
+                                  fontWeight: 'bold',
                                   color: '#FFFFFF',
-                                  textShadow: '2px 2px 4px rgba(0,0,0,0.7)',
-                                  lineHeight: '1.1'
+                                  textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                                  minWidth: '80px'
                                 },
-                                children: `${position} ${player.name}`
+                                children: `${position}.`
+                              }
+                            },
+                            {
+                              type: 'div',
+                              props: {
+                                style: {
+                                  fontSize: '54px',
+                                  fontWeight: 'bold',
+                                  color: '#FFFFFF',
+                                  textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                                },
+                                children: player.name
                               }
                             }
                           ]
@@ -300,19 +313,17 @@ async function generateShareImage(baseImageBuffer, scores) {
                         type: 'div',
                         props: {
                           style: {
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'flex-end'
+                            textAlign: 'right'
                           },
                           children: [
                             {
                               type: 'div',
                               props: {
                                 style: {
-                                  fontSize: '48px',
-                                  fontWeight: '900',
+                                  fontSize: '56px',
+                                  fontWeight: 'bold',
                                   color: '#FFFFFF',
-                                  textShadow: '2px 2px 4px rgba(0,0,0,0.7)'
+                                  textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
                                 },
                                 children: player.score
                               }
@@ -321,10 +332,10 @@ async function generateShareImage(baseImageBuffer, scores) {
                               type: 'div',
                               props: {
                                 style: {
-                                  fontSize: '22px',
+                                  fontSize: '32px',
                                   fontWeight: '600',
-                                  color: '#9CA3AF',
-                                  textShadow: '1px 1px 2px rgba(0,0,0,0.7)'
+                                  color: 'rgba(156, 163, 175, 1)', // Gray-400 equivalent
+                                  textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
                                 },
                                 children: 'points'
                               }
