@@ -108,13 +108,13 @@ function FinalScoresLeaderboard() {
         // You could show a toast notification here
         alert('Game results copied to clipboard! 📋');
       }
-    } catch (error) {
+    } catch {
       // Fallback for any sharing errors
       const shareText = `${shareData.text}\n\nPlay at: ${gameUrl}`;
       try {
         await navigator.clipboard.writeText(shareText);
         alert('Game results copied to clipboard! 📋');
-      } catch (clipboardError) {
+      } catch {
         // Final fallback - show share info in alert
         alert(`${shareText}\n\nShare this with your friends!`);
       }
