@@ -186,151 +186,35 @@ async function handleShareImage(request, env) {
 }
 
 async function generateShareImage(baseImageBuffer, scores) {
-  try {
-    // Use Cloudflare's native image transformation to overlay text on the base image
-    // First, let's create an SVG overlay with just the scores
-    const svgOverlay = `
-      <svg width="620" height="630" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <style>
-            .score-text { 
-              font-family: Arial, sans-serif; 
-              font-weight: bold; 
-              text-anchor: middle;
-              fill: white;
-              paint-order: stroke fill;
-              stroke: rgba(0,0,0,0.8);
-              stroke-width: 2px;
-            }
-            .score-number { 
-              font-family: Arial, sans-serif; 
-              font-weight: bold; 
-              text-anchor: middle;
-              fill: #FFD700;
-              paint-order: stroke fill;
-              stroke: rgba(0,0,0,0.8);
-              stroke-width: 2px;
-            }
-          </style>
-        </defs>
-        ${scores.slice(0, 3).map((player, index) => {
-          const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
-          const y = 200 + (index * 100);
-          return `
-            <text x="310" y="${y}" font-size="36" class="score-text">${medal} ${player.name}</text>
-            <text x="310" y="${y + 35}" font-size="28" class="score-number">${player.score} pts</text>
-          `;
-        }).join('')}
-      </svg>
-    `;
-
-    // Convert SVG to a data URL
-    const svgDataUrl = `data:image/svg+xml;base64,${btoa(svgOverlay)}`;
+  // Simple, reliable SVG composition with your base image
+  const base64Image = Buffer.from(baseImageBuffer).toString('base64');
+  
+  const svgImage = `<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Your base image -->
+    <image x="0" y="0" width="1200" height="630" href="data:image/png;base64,${base64Image}" />
     
-    // Use Cloudflare Images transformation to composite the overlay onto the base image
-    const response = await fetch(svgDataUrl, {
-      cf: {
-        image: {
-          // First create a background from our base image (we'll serve it from a temporary URL)
-          draw: [{
-            url: `data:image/png;base64,${Buffer.from(baseImageBuffer).toString('base64')}`,
-            fit: 'cover',
-            width: 1200,
-            height: 630
-          }],
-          width: 1200,
-          height: 630,
-          format: 'png'
-        }
-      }
-    });
-
-    if (response.ok) {
-      return await response.arrayBuffer();
-    } else {
-      throw new Error('Image transformation failed');
-    }
-    
-  } catch (error) {
-    console.error('Error generating image with Cloudflare Images:', error);
-    
-    // Fallback: Composite using a different approach - create a new image entirely
-    try {
-      // Create a canvas-style approach using SVG that includes the background
-      const compositeSvg = `
-        <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <defs>
-            <style>
-              .score-text { 
-                font-family: Arial, sans-serif; 
-                font-weight: bold; 
-                text-anchor: middle;
-                fill: white;
-                paint-order: stroke fill;
-                stroke: rgba(0,0,0,0.8);
-                stroke-width: 3px;
-                stroke-linejoin: round;
-              }
-              .score-number { 
-                font-family: Arial, sans-serif; 
-                font-weight: bold; 
-                text-anchor: middle;
-                fill: #FFD700;
-                paint-order: stroke fill;
-                stroke: rgba(0,0,0,0.8);
-                stroke-width: 3px;
-                stroke-linejoin: round;
-              }
-            </style>
-          </defs>
-          
-          <!-- Background image (base64 embedded) -->
-          <image x="0" y="0" width="1200" height="630" 
-                 xlink:href="data:image/png;base64,${Buffer.from(baseImageBuffer).toString('base64')}" />
-          
-          <!-- Safe zone overlay (right side) -->
-          <g transform="translate(580, 0)">
-            <!-- Semi-transparent background for better text readability -->
-            <rect x="0" y="0" width="620" height="630" fill="rgba(255,0,0,0.1)" />
-            
-            <!-- Score text positioned in safe zone -->
-            ${scores.slice(0, 3).map((player, index) => {
-              const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
-              const y = 200 + (index * 120);
-              return `
-                <text x="310" y="${y}" font-size="42" class="score-text">${medal} ${player.name}</text>
-                <text x="310" y="${y + 45}" font-size="32" class="score-number">${player.score} pts</text>
-              `;
-            }).join('')}
-          </g>
-        </svg>
+    <!-- Scores overlaid in the red safe zone (right side) -->
+    ${scores.slice(0, 3).map((player, index) => {
+      const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
+      const x = 890; // Center of safe zone (580 + 620/2)
+      const startY = 200;
+      const y = startY + (index * 100);
+      
+      return `
+        <text x="${x}" y="${y}" font-family="Arial, sans-serif" font-size="36" font-weight="bold" 
+              fill="white" text-anchor="middle" 
+              stroke="black" stroke-width="2">${medal} ${player.name}</text>
+        <text x="${x}" y="${y + 40}" font-family="Arial, sans-serif" font-size="28" font-weight="bold" 
+              fill="#FFD700" text-anchor="middle" 
+              stroke="black" stroke-width="2">${player.score} pts</text>
       `;
-      
-      return new Response(compositeSvg, {
-        headers: { 'Content-Type': 'image/svg+xml' }
-      }).arrayBuffer();
-      
-    } catch (finalError) {
-      console.error('Final fallback failed:', finalError);
-      
-      // Ultimate fallback - simple text-based SVG
-      const simpleSvg = `
-        <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
-          <rect width="1200" height="630" fill="#1f2937"/>
-          <text x="600" y="150" font-family="Arial" font-size="48" fill="white" text-anchor="middle" font-weight="bold">🎵 Who Sampled That? 🎵</text>
-          <text x="600" y="220" font-family="Arial" font-size="36" fill="#FFD700" text-anchor="middle" font-weight="bold">FINAL SCORES! 🏆</text>
-          ${scores.slice(0, 3).map((player, index) => {
-            const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
-            const y = 320 + (index * 80);
-            return `<text x="600" y="${y}" font-family="Arial" font-size="32" fill="white" text-anchor="middle" font-weight="bold">${medal} ${player.name}: ${player.score} pts</text>`;
-          }).join('')}
-          <text x="600" y="580" font-family="Arial" font-size="24" fill="#9CA3AF" text-anchor="middle">Play at whosampledthat.com</text>
-        </svg>
-      `;
-      
-      return new Response(simpleSvg, {
-        headers: { 'Content-Type': 'image/svg+xml' }
-      }).arrayBuffer();
+    }).join('')}
+  </svg>`;
+
+  return new Response(svgImage, {
+    headers: { 
+      'Content-Type': 'image/svg+xml',
+      'Cache-Control': 'public, max-age=3600'
     }
-  }
+  }).arrayBuffer();
 } 
