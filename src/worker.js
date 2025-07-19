@@ -89,7 +89,34 @@ async function handleSharePage(request, env) {
     const title = `Who Sampled That? - Game Results! 🎵`;
     const description = `Check out these amazing scores: ${top3Text}`;
     
-    // Create the dynamic meta tags
+    // Remove existing Open Graph tags and replace with dynamic ones
+    // Remove static OG tags
+    html = html.replace(/<meta property="og:type"[^>]*>/gi, '');
+    html = html.replace(/<meta property="og:url"[^>]*>/gi, '');
+    html = html.replace(/<meta property="og:title"[^>]*>/gi, '');
+    html = html.replace(/<meta property="og:description"[^>]*>/gi, '');
+    html = html.replace(/<meta property="og:image"[^>]*>/gi, '');
+    html = html.replace(/<meta property="og:image:alt"[^>]*>/gi, '');
+    html = html.replace(/<meta property="og:image:width"[^>]*>/gi, '');
+    html = html.replace(/<meta property="og:image:height"[^>]*>/gi, '');
+    html = html.replace(/<meta property="og:site_name"[^>]*>/gi, '');
+    html = html.replace(/<meta property="og:locale"[^>]*>/gi, '');
+    
+    // Remove static Twitter tags
+    html = html.replace(/<meta property="twitter:card"[^>]*>/gi, '');
+    html = html.replace(/<meta property="twitter:url"[^>]*>/gi, '');
+    html = html.replace(/<meta property="twitter:title"[^>]*>/gi, '');
+    html = html.replace(/<meta property="twitter:description"[^>]*>/gi, '');
+    html = html.replace(/<meta property="twitter:image"[^>]*>/gi, '');
+    html = html.replace(/<meta property="twitter:image:alt"[^>]*>/gi, '');
+    html = html.replace(/<meta property="twitter:creator"[^>]*>/gi, '');
+    html = html.replace(/<meta property="twitter:site"[^>]*>/gi, '');
+    html = html.replace(/<meta name="twitter:card"[^>]*>/gi, '');
+    html = html.replace(/<meta name="twitter:title"[^>]*>/gi, '');
+    html = html.replace(/<meta name="twitter:description"[^>]*>/gi, '');
+    html = html.replace(/<meta name="twitter:image"[^>]*>/gi, '');
+    
+    // Create the dynamic meta tags with correct dimensions for square image
     const dynamicMetaTags = `
     <!-- Dynamic Open Graph tags for this specific share -->
     <meta property="og:type" content="website">
@@ -97,8 +124,8 @@ async function handleSharePage(request, env) {
     <meta property="og:title" content="${title}">
     <meta property="og:description" content="${description}">
     <meta property="og:image" content="${imageUrl}">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
+    <meta property="og:image:width" content="1080">
+    <meta property="og:image:height" content="1080">
     <meta property="og:site_name" content="Who Sampled That?">
     
     <!-- Twitter Card tags -->
