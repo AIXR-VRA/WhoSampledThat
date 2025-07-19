@@ -90,13 +90,13 @@ function FinalScoresLeaderboard() {
     }));
     
     const encodedScores = encodeURIComponent(JSON.stringify(scoresData));
-    const shareImageUrl = `${window.location.origin}/api/share-image?scores=${encodedScores}`;
-    const gameUrl = window.location.origin;
+    // Create a specific share URL that will have dynamic meta tags
+    const shareUrl = `${window.location.origin}/share?scores=${encodedScores}`;
     
     const shareData = {
       title: 'Who Sampled That? - Game Results! 🎵',
       text: `Check out these amazing scores from our music guessing game! ${top3Players.map(p => `${p.name}: ${p.score} pts`).join(', ')}`,
-      url: gameUrl
+      url: shareUrl
     };
 
     try {
@@ -104,13 +104,13 @@ function FinalScoresLeaderboard() {
         await navigator.share(shareData);
       } else {
         // Fallback to copying URL
-        await navigator.clipboard.writeText(`${shareData.text}\n\nPlay at: ${gameUrl}\n\nShare image: ${shareImageUrl}`);
+        await navigator.clipboard.writeText(`${shareData.text}\n\nPlay at: ${shareUrl}`);
         // You could show a toast notification here
         alert('Game results copied to clipboard! 📋');
       }
     } catch {
       // Fallback for any sharing errors
-      const shareText = `${shareData.text}\n\nPlay at: ${gameUrl}`;
+      const shareText = `${shareData.text}\n\nPlay at: ${shareUrl}`;
       try {
         await navigator.clipboard.writeText(shareText);
         alert('Game results copied to clipboard! 📋');
