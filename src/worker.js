@@ -254,19 +254,22 @@ async function generateShareImage(baseImageBuffer, scores) {
                 gap: '40px'
               },
               children: scores.slice(0, 3).map((player, index) => {
-                const medal = index === 0 ? '1st' : index === 1 ? '2nd' : '3rd';
+                const position = index === 0 ? '1st' : index === 1 ? '2nd' : '3rd';
                 return {
                   type: 'div',
                   key: index,
                   props: {
                     style: {
                       display: 'flex',
-                      flexDirection: 'column',
                       alignItems: 'center',
-                      backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                      padding: '30px',
-                      borderRadius: '25px',
-                      width: '100%'
+                      justifyContent: 'space-between',
+                      background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 50%, rgba(30, 41, 59, 0.95) 100%)',
+                      padding: '25px 35px',
+                      borderRadius: '20px',
+                      width: '100%',
+                      border: '1px solid rgba(148, 163, 184, 0.3)',
+                      backdropFilter: 'blur(10px)',
+                      boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2)'
                     },
                     children: [
                       {
@@ -274,31 +277,20 @@ async function generateShareImage(baseImageBuffer, scores) {
                         props: {
                           style: {
                             display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '20px',
-                            marginBottom: '15px'
+                            alignItems: 'center'
                           },
                           children: [
                             {
                               type: 'div',
                               props: {
                                 style: {
-                                  fontSize: '70px'
-                                },
-                                children: medal
-                              }
-                            },
-                            {
-                              type: 'div',
-                              props: {
-                                style: {
-                                  fontSize: '60px',
-                                  fontWeight: 'bold',
+                                  fontSize: '48px',
+                                  fontWeight: '900',
                                   color: '#FFFFFF',
-                                  textShadow: '3px 3px 6px rgba(0,0,0,0.8)'
+                                  textShadow: '2px 2px 4px rgba(0,0,0,0.7)',
+                                  lineHeight: '1.1'
                                 },
-                                children: player.name
+                                children: `${position} ${player.name}`
                               }
                             }
                           ]
@@ -308,13 +300,36 @@ async function generateShareImage(baseImageBuffer, scores) {
                         type: 'div',
                         props: {
                           style: {
-                            fontSize: '48px',
-                            fontWeight: 'bold',
-                            color: '#FFD700',
-                            textShadow: '3px 3px 6px rgba(0,0,0,0.8)',
-                            textAlign: 'center'
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'flex-end'
                           },
-                          children: `${player.score} pts`
+                          children: [
+                            {
+                              type: 'div',
+                              props: {
+                                style: {
+                                  fontSize: '48px',
+                                  fontWeight: '900',
+                                  color: '#FFFFFF',
+                                  textShadow: '2px 2px 4px rgba(0,0,0,0.7)'
+                                },
+                                children: player.score
+                              }
+                            },
+                            {
+                              type: 'div',
+                              props: {
+                                style: {
+                                  fontSize: '22px',
+                                  fontWeight: '600',
+                                  color: '#9CA3AF',
+                                  textShadow: '1px 1px 2px rgba(0,0,0,0.7)'
+                                },
+                                children: 'points'
+                              }
+                            }
+                          ]
                         }
                       }
                     ]
