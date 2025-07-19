@@ -33,7 +33,10 @@ export default function InfoDropdown() {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="fixed left-1/2 -translate-x-1/2 mt-3 w-[calc(100vw-2rem)] max-w-80 md:!absolute md:left-auto md:right-0 md:translate-x-0 md:w-96 md:max-w-none origin-top md:origin-top-right dropdown-menu focus:outline-none z-[100]">
+        <Menu.Items 
+          anchor="bottom"
+          className="w-[calc(100vw-2rem)] max-w-80 md:w-96 md:max-w-none dropdown-menu focus:outline-none z-[100] mt-2 !left-1/2 !-translate-x-1/2"
+        >
           <div className="p-4 md:p-6">
             <div className="flex items-center gap-3 mb-4 md:mb-6">
               <Info className="h-5 w-5 md:h-6 md:w-6 text-blue-400" />
