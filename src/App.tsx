@@ -53,6 +53,20 @@ const AnimatedBackground = memo(() => {
   );
 });
 
+// Generate a short, clean share ID from score data
+async function generateShareId(scoresData: Array<{name: string, score: number, position: number}>): Promise<string> {
+  // Create a compact representation: name1:score1,name2:score2,name3:score3
+  const compactData = scoresData.map(p => `${p.name}:${p.score}`).join(',');
+  
+  // Base64 encode it for URL safety (keep full string for decoding)
+  const encoder = new TextEncoder();
+  const data = encoder.encode(compactData);
+  const base64 = btoa(String.fromCharCode(...data));
+  
+  // Make it URL-safe by replacing problematic characters
+  return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
+
 function FinalScoresLeaderboard() {
   const { players, resetScores, startGame, resetGame } = useGame();
   
@@ -89,9 +103,9 @@ function FinalScoresLeaderboard() {
       position: player.position
     }));
     
-    const encodedScores = encodeURIComponent(JSON.stringify(scoresData));
-    // Create a specific share URL that will have dynamic meta tags
-    const shareUrl = `${window.location.origin}/share?scores=${encodedScores}`;
+    // Generate a short, clean share ID from the score data
+    const shareId = await generateShareId(scoresData);
+    const shareUrl = `${window.location.origin}/share/${shareId}`;
     
     const shareData = {
       title: 'Who Sampled That? - Game Results! 🎵',

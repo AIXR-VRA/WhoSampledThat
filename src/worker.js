@@ -3,12 +3,12 @@ export default {
     const url = new URL(request.url);
     
     // Handle share page with dynamic meta tags
-    if (url.pathname === '/share') {
+    if (url.pathname.startsWith('/share/')) {
       return handleSharePage(request, env);
     }
     
     // Handle share image generation
-    if (url.pathname === '/api/share-image') {
+    if (url.pathname.startsWith('/api/share-image/')) {
       return handleShareImage(request, env);
     }
     
@@ -17,18 +17,50 @@ export default {
   },
 };
 
+// Decode share ID back to score data
+function decodeShareId(shareId) {
+  try {
+    // Reverse the URL-safe base64 encoding
+    const base64 = shareId.replace(/-/g, '+').replace(/_/g, '/');
+    // Add padding if needed
+    const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);
+    
+    // Decode from base64
+    const decoded = atob(padded);
+    
+    // Parse the compact format: name1:score1,name2:score2,name3:score3
+    const pairs = decoded.split(',');
+    return pairs.map((pair, index) => {
+      const [name, score] = pair.split(':');
+      return {
+        name: name,
+        score: parseInt(score, 10),
+        position: index + 1
+      };
+    });
+  } catch (error) {
+    console.error('Error decoding share ID:', error);
+    return null;
+  }
+}
+
 async function handleSharePage(request, env) {
   try {
     const url = new URL(request.url);
-    const scoresParam = url.searchParams.get('scores');
+    const shareId = url.pathname.split('/share/')[1];
     
-    if (!scoresParam) {
-      // No scores provided, redirect to main game
+    if (!shareId) {
+      // No share ID provided, redirect to main game
       return Response.redirect(url.origin, 302);
     }
     
-    const scores = JSON.parse(decodeURIComponent(scoresParam));
-    const imageUrl = `${url.origin}/api/share-image?scores=${scoresParam}`;
+    const scores = decodeShareId(shareId);
+    if (!scores) {
+      // Invalid share ID, redirect to main game
+      return Response.redirect(url.origin, 302);
+    }
+    
+    const imageUrl = `${url.origin}/api/share-image/${shareId}`;
     
     // Create dynamic title and description
     const top3Text = scores.slice(0, 3).map((p, i) => {
@@ -115,13 +147,16 @@ async function handleSharePage(request, env) {
 async function handleShareImage(request, env) {
   try {
     const url = new URL(request.url);
-    const scoresParam = url.searchParams.get('scores');
+    const shareId = url.pathname.split('/api/share-image/')[1];
     
-    if (!scoresParam) {
-      return new Response('Missing scores parameter', { status: 400 });
+    if (!shareId) {
+      return new Response('Missing share ID', { status: 400 });
     }
     
-    const scores = JSON.parse(decodeURIComponent(scoresParam));
+    const scores = decodeShareId(shareId);
+    if (!scores) {
+      return new Response('Invalid share ID', { status: 400 });
+    }
     
     // Get the base image from assets
     const baseImageRequest = new Request(new URL('/social-share-card-base.png', request.url));
@@ -151,65 +186,176 @@ async function handleShareImage(request, env) {
 }
 
 async function generateShareImage(baseImageBuffer, scores) {
-  // Create canvas and load base image
-  const canvas = new OffscreenCanvas(1200, 630); // Standard social media share size
-  const ctx = canvas.getContext('2d');
-  
-  // Load base image
-  const baseImage = await createImageBitmap(new Uint8Array(baseImageBuffer));
-  
-  // Draw base image
-  ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
-  
-  // Safe zone positioning (right side red area)
-  const safeZoneLeft = 580; // Start of safe zone
-  const safeZoneWidth = 620; // Width of safe zone
-  const safeZoneCenterX = safeZoneLeft + (safeZoneWidth / 2);
-  
-  // Set up text styling for title
-  ctx.fillStyle = '#FFFFFF';
-  ctx.textAlign = 'center';
-  ctx.font = 'bold 36px Arial, sans-serif';
-  
-  // Add title in safe zone
-  ctx.fillText('FINAL SCORES! 🏆', safeZoneCenterX, 120);
-  
-  // Position for scores (starting in safe zone)
-  let yPosition = 180;
-  const lineHeight = 65;
-  
-  // Set font for scores
-  ctx.font = 'bold 32px Arial, sans-serif';
-  
-  // Draw top 3 scores in safe zone
-  scores.slice(0, 3).forEach((player, index) => {
-    const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
-    const text = `${medal} ${player.name}`;
-    const scoreText = `${player.score} pts`;
+  try {
+    // Import the ImageResponse from workers-og (the correct library for Cloudflare Workers)
+    const { ImageResponse } = await import('workers-og');
     
-    // Player name with medal
-    ctx.fillStyle = '#000000'; // Shadow
-    ctx.fillText(text, safeZoneCenterX + 2, yPosition + 2);
-    ctx.fillStyle = '#FFFFFF'; // Main text
-    ctx.fillText(text, safeZoneCenterX, yPosition);
+    // Create JSX component for the OG image using workers-og
+    const jsx = {
+      type: 'div',
+      props: {
+        style: {
+          height: '630px',
+          width: '1200px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#1f2937',
+          background: 'linear-gradient(135deg, #1f2937 0%, #374151 100%)',
+          fontFamily: 'Arial, sans-serif',
+          color: '#FFFFFF',
+          padding: '40px'
+        },
+        children: [
+          // Title
+          {
+            type: 'div',
+            props: {
+              style: {
+                fontSize: '48px',
+                fontWeight: 'bold',
+                marginBottom: '40px',
+                textAlign: 'center'
+              },
+              children: '🎵 Who Sampled That? 🎵'
+            }
+          },
+          // Subtitle
+          {
+            type: 'div',
+            props: {
+              style: {
+                fontSize: '36px',
+                fontWeight: 'bold',
+                marginBottom: '50px',
+                color: '#FFD700',
+                textAlign: 'center'
+              },
+              children: 'FINAL SCORES! 🏆'
+            }
+          },
+          // Scores container
+          {
+            type: 'div',
+            props: {
+              style: {
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '25px',
+                alignItems: 'center',
+                width: '100%'
+              },
+              children: scores.slice(0, 3).map((player, index) => {
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
+                return {
+                  type: 'div',
+                  key: index,
+                  props: {
+                    style: {
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      width: '600px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                      padding: '20px 30px',
+                      borderRadius: '15px',
+                      fontSize: '32px',
+                      fontWeight: 'bold'
+                    },
+                    children: [
+                      {
+                        type: 'div',
+                        props: {
+                          style: {
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '15px'
+                          },
+                          children: [
+                            {
+                              type: 'span',
+                              props: {
+                                style: { fontSize: '40px' },
+                                children: medal
+                              }
+                            },
+                            {
+                              type: 'span',
+                              props: {
+                                children: player.name
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        type: 'span',
+                        props: {
+                          style: { color: '#FFD700' },
+                          children: `${player.score} pts`
+                        }
+                      }
+                    ]
+                  }
+                };
+              })
+            }
+          },
+          // Footer
+          {
+            type: 'div',
+            props: {
+              style: {
+                fontSize: '24px',
+                marginTop: '50px',
+                color: '#9CA3AF',
+                textAlign: 'center'
+              },
+              children: 'Play at whosampledthat.com'
+            }
+          }
+        ]
+      }
+    };
+
+    // Generate the image using ImageResponse from workers-og
+    const response = new ImageResponse(jsx, {
+      width: 1200,
+      height: 630,
+    });
     
-    // Score below name
-    ctx.font = 'bold 24px Arial, sans-serif';
-    ctx.fillStyle = '#FFD700'; // Gold color for score
-    ctx.fillText(scoreText, safeZoneCenterX, yPosition + 28);
+    return await response.arrayBuffer();
+  } catch (error) {
+    console.error('Error generating image with workers-og:', error);
     
-    // Reset font for next player
-    ctx.font = 'bold 32px Arial, sans-serif';
+    // Fallback: return a simple SVG
+    const fallbackSvg = `
+      <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#1f2937;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#374151;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <rect width="1200" height="630" fill="url(#grad1)"/>
+        <text x="600" y="150" font-family="Arial" font-size="48" fill="white" text-anchor="middle" font-weight="bold">🎵 Who Sampled That? 🎵</text>
+        <text x="600" y="220" font-family="Arial" font-size="36" fill="#FFD700" text-anchor="middle" font-weight="bold">FINAL SCORES! 🏆</text>
+        ${scores.slice(0, 3).map((player, index) => {
+          const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
+          const y = 320 + (index * 80);
+          return `
+            <rect x="300" y="${y - 35}" width="600" height="60" fill="rgba(255, 255, 255, 0.1)" rx="15"/>
+            <text x="330" y="${y}" font-family="Arial" font-size="32" fill="white" font-weight="bold">${medal} ${player.name}</text>
+            <text x="870" y="${y}" font-family="Arial" font-size="32" fill="#FFD700" text-anchor="end" font-weight="bold">${player.score} pts</text>
+          `;
+        }).join('')}
+        <text x="600" y="580" font-family="Arial" font-size="24" fill="#9CA3AF" text-anchor="middle">Play at whosampledthat.com</text>
+      </svg>
+    `;
     
-    yPosition += lineHeight;
-  });
-  
-  // Add play text at bottom of safe zone
-  ctx.font = 'bold 20px Arial, sans-serif';
-  ctx.fillStyle = '#FFFFFF';
-  ctx.fillText('Play at whosampledthat.com', safeZoneCenterX, canvas.height - 60);
-  
-  // Convert canvas to PNG
-  const blob = await canvas.convertToBlob({ type: 'image/png' });
-  return await blob.arrayBuffer();
+    return new Response(fallbackSvg, {
+      headers: { 'Content-Type': 'image/svg+xml' }
+    }).arrayBuffer();
+  }
 } 
