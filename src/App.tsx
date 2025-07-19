@@ -105,7 +105,7 @@ function FinalScoresLeaderboard() {
     
     // Generate a short, clean share ID from the score data
     const shareId = await generateShareId(scoresData);
-    const shareUrl = `${window.location.origin}/share/${shareId}`;
+    const shareUrl = `${window.location.origin}?scores=${shareId}`;
     
     const shareData = {
       title: 'Who Sampled That? - Game Results! 🎵',
