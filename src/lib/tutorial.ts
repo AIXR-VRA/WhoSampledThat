@@ -19,7 +19,7 @@ export const createTutorial = (_onSkip: () => void, onComplete: () => void, onSt
         element: '.tutorial-welcome',
         popover: {
           title: '🎵 Welcome to Who Sampled That!',
-          description: 'This is your first game! Who Sampled that is best played with a group of friends who can discuss their guesses out loud. Pro tip: connect yor phone to a speaker to hear the music together!',
+          description: 'This is your first game! Who Sampled that is best played with a group of friends who can discuss their guesses out loud. Pro tip: connect your phone to a speaker to hear the music together!',
           side: 'bottom',
           align: 'start',
           showButtons: ['next']
