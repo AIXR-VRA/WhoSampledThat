@@ -6,6 +6,7 @@ import { useGame } from '../contexts/GameContext';
 import WaveformPlayer from '../components/WaveformPlayer';
 import roundStartSound from '../assets/who sample that jingle.mp3';
 import { createTutorial, tutorialStyles } from '../lib/tutorial';
+import tracklist from '../data/tracklist.json';
 
 type ScoreCategory = 'artist' | 'track' | 'sample';
 
@@ -13,6 +14,7 @@ const ROUND_SCORES_STORAGE_KEY = 'whoSampledThatRoundScores';
 
 function GameRound() {
   const { players, currentRound, currentTrack, nextRound, previousRound, awardPoints, settings, isFirstTimeUser, skipTutorial, markTutorialCompleted } = useGame();
+  const totalRounds = tracklist.length;
   const [roundScores, setRoundScores] = useState<Record<number, Record<ScoreCategory, boolean>>>({});
   const [persistentRoundScores, setPersistentRoundScores] = useState<Record<number, Record<number, Record<ScoreCategory, boolean>>>>({});
   const [canPlayVideos, setCanPlayVideos] = useState(false);
@@ -525,7 +527,7 @@ function GameRound() {
         {/* Round Header - positioned to connect with border */}
         <div className="absolute top-0 left-4 z-10 -mt-3">
           <div className="bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-2 rounded-lg text-sm font-bold text-white shadow-lg">
-            Round {currentRound}
+            Round {currentRound} of {totalRounds}
           </div>
         </div>
         
@@ -1000,7 +1002,7 @@ function GameRound() {
           </Button>
           <div className="text-center">
             <div className="retro-tech text-cyan-300 text-sm font-medium tracking-wider">JUKEBOX NAVIGATION</div>
-            <div className="retro-display text-white text-lg font-bold">ROUND {currentRound}</div>
+            <div className="shrikhand-regular text-white text-lg font-bold">ROUND {currentRound} OF {totalRounds}</div>
           </div>
           <Button 
             onClick={handleNextRound}
@@ -1014,7 +1016,7 @@ function GameRound() {
         {/* Mobile Navigation */}
         <div className="md:hidden">
           <div className="text-center mb-4">
-            <div className="retro-tech text-cyan-300 text-sm font-medium tracking-wider">ROUND {currentRound}</div>
+            <div className="shrikhand-regular text-cyan-300 text-sm font-medium tracking-wider">ROUND {currentRound} OF {totalRounds}</div>
           </div>
           <div className="flex justify-between items-center gap-4">
             <Button 

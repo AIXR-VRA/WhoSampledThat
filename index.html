@@ -1,13 +1,157 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- Basic Meta Tags -->
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    
+    <!-- Primary Meta Tags -->
+    <title>Who Sampled That? - The Ultimate Music Guessing Game | Test Your Music Knowledge</title>
+    <meta name="title" content="Who Sampled That? - The Ultimate Music Guessing Game | Test Your Music Knowledge" />
+    <meta name="description" content="Test your music knowledge with Who Sampled That? - an interactive game where you identify original samples and the songs that use them. Play with friends, compete for points, and discover musical connections. Free music guessing game with YouTube integration." />
+    <meta name="keywords" content="music game, sample game, music quiz, guessing game, music knowledge, hip hop samples, music trivia, sample quiz, music education, interactive game, multiplayer music game, youtube music, sample identification, music history" />
+    <meta name="author" content="Ryza" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="7 days" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://whosampledthat.com/" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://whosampledthat.com/" />
+    <meta property="og:title" content="Who Sampled That? - The Ultimate Music Guessing Game" />
+    <meta property="og:description" content="Test your music knowledge with Who Sampled That? - an interactive game where you identify original samples and the songs that use them. Play with friends, compete for points, and discover musical connections." />
+    <meta property="og:image" content="https://whosampledthat.com/who-sampled-that-logo-small.png" />
+    <meta property="og:image:alt" content="Who Sampled That Game Logo" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Who Sampled That?" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://whosampledthat.com/" />
+    <meta property="twitter:title" content="Who Sampled That? - The Ultimate Music Guessing Game" />
+    <meta property="twitter:description" content="Test your music knowledge with Who Sampled That? - an interactive game where you identify original samples and the songs that use them. Play with friends and compete for points!" />
+    <meta property="twitter:image" content="https://whosampledthat.com/who-sampled-that-logo-small.png" />
+    <meta property="twitter:image:alt" content="Who Sampled That Game Logo" />
+    <meta property="twitter:creator" content="@whosampledthat" />
+    <meta property="twitter:site" content="@whosampledthat" />
+    
+    <!-- Additional Meta Tags -->
+    <meta name="theme-color" content="#1f2937" />
+    <meta name="msapplication-TileColor" content="#1f2937" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Who Sampled That?" />
+    <meta name="application-name" content="Who Sampled That?" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    
+    <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.youtube.com" crossorigin>
+    <link rel="preconnect" href="https://i.ytimg.com" crossorigin>
+    
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
-    <title>Who Sampled That</title>
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Who Sampled That?",
+      "alternateName": "Who Sampled That Game",
+      "description": "The ultimate music guessing game where players test their knowledge by identifying original samples and the songs that use them. Features YouTube integration, multiplayer competition, and real-time scoring.",
+      "url": "https://whosampledthat.com/",
+      "applicationCategory": "GameApplication",
+      "genre": "Music Game",
+      "operatingSystem": "Web Browser",
+      "browserRequirements": "HTML5, JavaScript enabled",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Ryza"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Who Sampled That"
+      },
+      "datePublished": "2024-01-01",
+      "dateModified": "2024-12-17",
+      "image": "https://whosampledthat.com/who-sampled-that-logo-small.png",
+      "screenshot": "https://whosampledthat.com/who-sampled-that-logo-small.png",
+      "featureList": [
+        "Multi-player music guessing game",
+        "YouTube audio integration",
+        "Real-time scoring system",
+        "Sample identification challenges",
+        "Interactive tutorial system",
+        "Mobile responsive design",
+        "Retro-futuristic UI"
+      ],
+      "gameItem": {
+        "@type": "Thing",
+        "name": "Music Samples and Songs"
+      },
+      "numberOfPlayers": "1+",
+      "playMode": "MultiPlayer"
+    }
+    </script>
+    
+    <!-- Additional Structured Data for Music Game -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Game",
+      "name": "Who Sampled That?",
+      "description": "An interactive music guessing game focused on identifying samples and their usage in modern songs",
+      "url": "https://whosampledthat.com/",
+      "genre": "Music Trivia",
+      "gamePlatform": "Web Browser",
+      "numberOfPlayers": "1+",
+      "playMode": ["MultiPlayer", "SinglePlayer"],
+      "gameItem": [
+        {
+          "@type": "Thing",
+          "name": "Original Music Samples"
+        },
+        {
+          "@type": "Thing", 
+          "name": "Modern Songs Using Samples"
+        }
+      ],
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      }
+    }
+    </script>
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="/src/assets/who sampled that logo small.png" as="image" />
+    
+    <!-- DNS Prefetch for External Resources -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="//www.youtube.com" />
+    <link rel="dns-prefetch" href="//i.ytimg.com" />
   </head>
   <body>
     <div id="root"></div>
