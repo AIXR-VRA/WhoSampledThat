@@ -217,8 +217,8 @@ async function generateShareImage(baseImageBuffer, scores) {
       type: 'div',
       props: {
         style: {
-          height: '630px',
-          width: '1200px',
+          height: '1080px',
+          width: '1920px',
           display: 'flex',
           position: 'relative',
           backgroundImage: `url(${base64Image})`,
@@ -227,21 +227,21 @@ async function generateShareImage(baseImageBuffer, scores) {
           fontFamily: 'Arial, sans-serif'
         },
         children: [
-          // Safe zone container (right side red area)
+          // Safe zone container (right side red area) - scaled for 1920x1080
           {
             type: 'div',
             props: {
               style: {
                 position: 'absolute',
-                right: '50px',
+                right: '80px',
                 top: '50%',
                 transform: 'translateY(-50%)',
-                width: '500px',
+                width: '800px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '30px'
+                gap: '50px'
               },
               children: scores.slice(0, 3).map((player, index) => {
                 const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
@@ -255,8 +255,8 @@ async function generateShareImage(baseImageBuffer, scores) {
                       alignItems: 'center',
                       textAlign: 'center',
                       backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                      padding: '20px',
-                      borderRadius: '15px',
+                      padding: '35px',
+                      borderRadius: '25px',
                       width: '100%'
                     },
                     children: [
@@ -264,8 +264,8 @@ async function generateShareImage(baseImageBuffer, scores) {
                         type: 'div',
                         props: {
                           style: {
-                            fontSize: '48px',
-                            marginBottom: '5px'
+                            fontSize: '80px',
+                            marginBottom: '10px'
                           },
                           children: medal
                         }
@@ -274,11 +274,11 @@ async function generateShareImage(baseImageBuffer, scores) {
                         type: 'div',
                         props: {
                           style: {
-                            fontSize: '36px',
+                            fontSize: '60px',
                             fontWeight: 'bold',
                             color: '#FFFFFF',
-                            textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-                            marginBottom: '5px'
+                            textShadow: '3px 3px 6px rgba(0,0,0,0.8)',
+                            marginBottom: '10px'
                           },
                           children: player.name
                         }
@@ -287,10 +287,10 @@ async function generateShareImage(baseImageBuffer, scores) {
                         type: 'div',
                         props: {
                           style: {
-                            fontSize: '28px',
+                            fontSize: '48px',
                             fontWeight: 'bold',
                             color: '#FFD700',
-                            textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                            textShadow: '3px 3px 6px rgba(0,0,0,0.8)'
                           },
                           children: `${player.score} pts`
                         }
@@ -307,8 +307,8 @@ async function generateShareImage(baseImageBuffer, scores) {
 
     // Generate the image using ImageResponse from workers-og
     const response = new ImageResponse(jsx, {
-      width: 1200,
-      height: 630,
+      width: 1920,
+      height: 1080,
     });
     
     return await response.arrayBuffer();
@@ -316,26 +316,26 @@ async function generateShareImage(baseImageBuffer, scores) {
     console.error('❌ OG_WORKERS_OG_ERROR:', error);
     console.log('🔄 OG_FALLBACK_TO_SVG');
     
-    // Fallback: return a clean SVG with the actual base image background
+    // Fallback: return a clean SVG with the actual base image background (1920x1080)
     const fallbackSvg = `
-      <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+      <svg width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <pattern id="baseImage" patternUnits="userSpaceOnUse" width="1200" height="630">
-            <image href="data:image/png;base64,${btoa(String.fromCharCode(...new Uint8Array(baseImageBuffer)))}" x="0" y="0" width="1200" height="630"/>
+          <pattern id="baseImage" patternUnits="userSpaceOnUse" width="1920" height="1080">
+            <image href="data:image/png;base64,${btoa(String.fromCharCode(...new Uint8Array(baseImageBuffer)))}" x="0" y="0" width="1920" height="1080"/>
           </pattern>
         </defs>
-        <rect width="1200" height="630" fill="url(#baseImage)"/>
+        <rect width="1920" height="1080" fill="url(#baseImage)"/>
         
-        <!-- Safe zone scores (right side) -->
-        <g transform="translate(950, 315)">
+        <!-- Safe zone scores (right side) - scaled for 1920x1080 -->
+        <g transform="translate(1520, 540)">
           ${scores.slice(0, 3).map((player, index) => {
             const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
-            const y = (index - 1) * 100; // Center around 0
+            const y = (index - 1) * 160; // Center around 0, bigger spacing
             return `
               <g transform="translate(0, ${y})">
-                <rect x="-200" y="-35" width="400" height="70" fill="rgba(0, 0, 0, 0.5)" rx="15"/>
-                <text x="0" y="-10" font-family="Arial" font-size="32" fill="white" text-anchor="middle" font-weight="bold">${medal} ${player.name}</text>
-                <text x="0" y="20" font-family="Arial" font-size="24" fill="#FFD700" text-anchor="middle" font-weight="bold">${player.score} pts</text>
+                <rect x="-320" y="-50" width="640" height="100" fill="rgba(0, 0, 0, 0.5)" rx="25"/>
+                <text x="0" y="-15" font-family="Arial" font-size="52" fill="white" text-anchor="middle" font-weight="bold">${medal} ${player.name}</text>
+                <text x="0" y="30" font-family="Arial" font-size="40" fill="#FFD700" text-anchor="middle" font-weight="bold">${player.score} pts</text>
               </g>
             `;
           }).join('')}
