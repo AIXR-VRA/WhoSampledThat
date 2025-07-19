@@ -125,21 +125,7 @@ async function handleSharePage(request, env) {
   }
 }
 
-// Detect if platform prefers square images
-function prefersPlatformSquareImage(userAgent) {
-  const ua = userAgent?.toLowerCase() || '';
-  
-  // WhatsApp and platforms that prefer square
-  const squarePlatforms = [
-    'whatsapp',
-    'instagram', 
-    'snapchat',
-    'discord',
-    'telegram'
-  ];
-  
-  return squarePlatforms.some(platform => ua.includes(platform));
-}
+
 
 async function handleShareImage(request, env) {
   try {
@@ -159,15 +145,13 @@ async function handleShareImage(request, env) {
       return new Response('Invalid share ID', { status: 400 });
     }
     
-    // Detect platform and choose appropriate image format
-    const userAgent = request.headers.get('User-Agent');
-    const useSquare = prefersPlatformSquareImage(userAgent);
-    const baseImageName = useSquare ? 'social-share-card-base-square.png' : 'social-share-card-base.png';
+    // Always use square image format for better compatibility
+    const baseImageName = 'social-share-card-base-square.png';
     
-    console.log('🔍 OG_PLATFORM_DETECTION:', { userAgent, useSquare, baseImageName });
+    console.log('🔍 OG_USING_SQUARE_FORMAT:', { baseImageName });
     console.log('📥 OG_FETCHING_BASE_IMAGE:', baseImageName);
     
-    // Get the appropriate base image from assets
+    // Get the base image from assets
     const baseImageRequest = new Request(new URL(`/${baseImageName}`, request.url));
     const baseImageResponse = await env.ASSETS.fetch(baseImageRequest);
     
@@ -181,7 +165,7 @@ async function handleShareImage(request, env) {
     
     // Generate the dynamic image with scores
     console.log('🖼️ OG_GENERATING_IMAGE');
-    const generatedImage = await generateShareImage(baseImageBuffer, scores, useSquare);
+    const generatedImage = await generateShareImage(baseImageBuffer, scores);
     console.log('✅ OG_IMAGE_GENERATED:', generatedImage.byteLength, 'bytes');
     
     return new Response(generatedImage, {
@@ -190,7 +174,7 @@ async function handleShareImage(request, env) {
         'Cache-Control': 'public, max-age=3600', // Cache for 1 hour
         'X-Content-Type-Options': 'nosniff',
         'X-Generated-At': new Date().toISOString(),
-        'X-Format-Used': useSquare ? 'square' : 'rectangle'
+        'X-Format-Used': 'square'
       }
     });
     
@@ -201,9 +185,9 @@ async function handleShareImage(request, env) {
   }
 }
 
-async function generateShareImage(baseImageBuffer, scores, useSquare = false) {
+async function generateShareImage(baseImageBuffer, scores) {
   try {
-    console.log('🎨 OG_GENERATING_WITH_FORMAT:', useSquare ? 'square' : 'rectangle');
+    console.log('🎨 OG_GENERATING_SQUARE_FORMAT');
     
     // Import the ImageResponse from workers-og (the correct library for Cloudflare Workers)
     const { ImageResponse } = await import('workers-og');
@@ -211,8 +195,8 @@ async function generateShareImage(baseImageBuffer, scores, useSquare = false) {
     // Convert base image to base64 for background
     const base64Image = `data:image/png;base64,${btoa(String.fromCharCode(...new Uint8Array(baseImageBuffer)))}`;
     
-    // Set dimensions based on format
-    const dimensions = useSquare ? { width: 1080, height: 1080 } : { width: 1920, height: 1080 };
+    // Always use square dimensions
+    const dimensions = { width: 1080, height: 1080 };
     
     // Create JSX component with base image background and scores
     const jsx = {
@@ -229,12 +213,11 @@ async function generateShareImage(baseImageBuffer, scores, useSquare = false) {
           fontFamily: 'Arial, sans-serif'
         },
         children: [
-          // Scores container - centered for square, right-side for rectangle
+          // Scores container - always centered for square layout
           {
             type: 'div',
             props: {
-              style: useSquare ? {
-                // Square layout - centered
+              style: {
                 position: 'absolute',
                 left: '50%',
                 top: '50%',
@@ -245,18 +228,6 @@ async function generateShareImage(baseImageBuffer, scores, useSquare = false) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '40px'
-              } : {
-                // Rectangle layout - right side
-                position: 'absolute',
-                right: '80px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                width: '800px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '50px'
               },
               children: scores.slice(0, 3).map((player, index) => {
                 const position = index === 0 ? '1st' : index === 1 ? '2nd' : '3rd';
