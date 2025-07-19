@@ -229,7 +229,7 @@ function AppHeader() {
               <DialogTitle className="text-2xl font-bold text-white">End Game?</DialogTitle>
             </div>
             <p className="text-gray-300 text-lg leading-relaxed mb-8">
-              Are you sure you want to end the current game? All progress will be lost and you'll return to the game setup.
+              Are you sure you want to end the current game? This will take you to the final scores and leaderboard.
             </p>
             <div className="flex gap-4">
               <Button

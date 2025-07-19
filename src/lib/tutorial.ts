@@ -19,7 +19,7 @@ export const createTutorial = (_onSkip: () => void, onComplete: () => void, onSt
         element: '.tutorial-welcome',
         popover: {
           title: '🎵 Welcome to Who Sampled That!',
-          description: 'This is your first game! Let me show you how to play. You can exit this tutorial anytime by clicking outside or pressing ESC.',
+          description: 'This is your first game! Who Sampled that is best played with a group of friends who can discuss their guesses out loud. Pro tip: connect yor phone to a speaker to hear the music together!',
           side: 'bottom',
           align: 'start',
           showButtons: ['next']
@@ -29,7 +29,7 @@ export const createTutorial = (_onSkip: () => void, onComplete: () => void, onSt
         element: isMobile ? '.tutorial-original-sample-mobile' : '.tutorial-original-sample-desktop',
         popover: {
           title: '🎼 Original Sample Player',
-          description: 'This is the original sample. It will auto-play so you can hear what to listen for! Notice the waveform shows how much time is left.',
+          description: 'This is the original sample. It will auto-play so you can hear what to listen for! Notice this track says it will play for 15 seconds.',
           side: isMobile ? 'top' : 'bottom',
           align: 'center'
         }
@@ -38,7 +38,7 @@ export const createTutorial = (_onSkip: () => void, onComplete: () => void, onSt
         element: isMobile ? '.tutorial-play-restart-buttons-mobile' : '.tutorial-play-restart-buttons-desktop',
         popover: {
           title: '▶️ Play Controls',
-          description: 'Use these buttons to control playback and restart to hear the sample again. Listen carefully to the original sample!',
+          description: 'Use these buttons to control playback and restart to hear the sample again. Listen carefully to this original sample!',
           side: 'top',
           align: 'center'
         }
