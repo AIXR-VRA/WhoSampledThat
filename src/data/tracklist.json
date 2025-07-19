@@ -3,6 +3,7 @@
     "originalSample": {
       "artist": "The Chi-Lites",
       "trackName": "Are You My Woman (Tell Me So)",
+      "year": 1970,
       "youtubeVideoId": "IEZAC9B7MFQ",
       "startTime": 0,
       "duration": 15
@@ -10,6 +11,7 @@
     "newSong": {
       "artist": "Beyoncé",
       "trackName": "Crazy In Love",
+      "year": 2003,
       "youtubeVideoId": "ViwtNLUqkMY"
     }
   },
@@ -17,6 +19,7 @@
     "originalSample": {
       "artist": "Nine Inch Nails",
       "trackName": "34 Ghosts IV",
+      "year": 2008,
       "youtubeVideoId": "XF_ceFugJjQ",
       "startTime": 0,
       "duration": 15
@@ -24,6 +27,7 @@
     "newSong": {
       "artist": "Lil Nas X",
       "trackName": "Old Town Road",
+      "year": 2019,
       "youtubeVideoId": "r7qovpFAGrQ"
     }
   },
@@ -31,6 +35,7 @@
     "originalSample": {
       "artist": "Edwin Birdsong",
       "trackName": "Cola Bottle Baby",
+      "year": 1979,
       "youtubeVideoId": "fiD39jo5Yo4",
       "startTime": 0,
       "duration": 15
@@ -38,6 +43,7 @@
     "newSong": {
       "artist": "Daft Punk",
       "trackName": "Harder, Better, Faster, Stronger",
+      "year": 2001,
       "youtubeVideoId": "gAjR4_CbPpQ"
     }
   },
@@ -45,6 +51,7 @@
     "originalSample": {
       "artist": "The Clash",
       "trackName": "Straight to Hell",
+      "year": 1982,
       "youtubeVideoId": "lpE2J11aLxo",
       "startTime": 0,
       "duration": 15
@@ -52,6 +59,7 @@
     "newSong": {
       "artist": "M.I.A.",
       "trackName": "Paper Planes",
+      "year": 2007,
       "youtubeVideoId": "ewRjZoRtu0Y"
     }
   },
@@ -59,6 +67,7 @@
     "originalSample": {
       "artist": "Lou Reed",
       "trackName": "Walk On The Wild Side",
+      "year": 1972,
       "youtubeVideoId": "oG6fayQBm9w",
       "startTime": 0,
       "duration": 15
@@ -66,6 +75,7 @@
     "newSong": {
       "artist": "A Tribe Called Quest",
       "trackName": "Can I Kick It?",
+      "year": 1990,
       "youtubeVideoId": "O3pyCGnZzYA"
     }
   },
@@ -73,6 +83,7 @@
     "originalSample": {
       "artist": "Diana Ross",
       "trackName": "I'm Coming Out",
+      "year": 1980,
       "youtubeVideoId": "3pmt-wWzC1E",
       "startTime": 0,
       "duration": 15
@@ -80,6 +91,7 @@
     "newSong": {
       "artist": "The Notorious B.I.G.",
       "trackName": "Mo Money Mo Problems",
+      "year": 1997,
       "youtubeVideoId": "gUhRKVIjJtw",
       "startTime": 38
     }
@@ -88,6 +100,7 @@
     "originalSample": {
       "artist": "Loleatta Holloway",
       "trackName": "Love Sensation",
+      "year": 1980,
       "youtubeVideoId": "1h6Su3t5Lqs",
       "startTime": 60,
       "duration": 15
@@ -95,6 +108,7 @@
     "newSong": {
       "artist": "Black Box",
       "trackName": "Ride On Time",
+      "year": 1989,
       "youtubeVideoId": "M0quXl_od3g"
     }
   },
@@ -102,6 +116,7 @@
     "originalSample": {
       "artist": "ABBA",
       "trackName": "Gimme! Gimme! Gimme! (A Man After Midnight)",
+      "year": 1979,
       "youtubeVideoId": "XEjLoHdbVeE",
       "startTime": 0,
       "duration": 15
@@ -109,6 +124,7 @@
     "newSong": {
       "artist": "Madonna",
       "trackName": "Hung Up",
+      "year": 2005,
       "youtubeVideoId": "EDwb9jOVRtU",
       "startTime": 17
     }
@@ -117,6 +133,7 @@
     "originalSample": {
       "artist": "Stevie Nicks",
       "trackName": "Edge of Seventeen",
+      "year": 1981,
       "youtubeVideoId": "3oZunnY-Cbs",
       "startTime": 0,
       "duration": 15
@@ -124,6 +141,7 @@
     "newSong": {
       "artist": "Destiny's Child",
       "trackName": "Bootylicious",
+      "year": 2001,
       "youtubeVideoId": "IyYnnUcgeMc"
     }
   },
@@ -131,6 +149,7 @@
     "originalSample": {
       "artist": "Camille Yarbrough",
       "trackName": "Take Yo' Praise",
+      "year": 1975,
       "youtubeVideoId": "sGQbtyctPmE",
       "startTime": 0,
       "duration": 15
@@ -138,6 +157,7 @@
     "newSong": {
       "artist": "Fatboy Slim",
       "trackName": "Praise You",
+      "year": 1998,
       "youtubeVideoId": "ruAi4VBoBSM",
       "startTime": 6
     }
@@ -146,6 +166,7 @@
     "originalSample": {
       "artist": "Chaka Khan",
       "trackName": "Fate",
+      "year": 1981,
       "youtubeVideoId": "S0NbcNc3HOk",
       "startTime": 0,
       "duration": 15
@@ -153,13 +174,15 @@
     "newSong": {
       "artist": "Stardust",
       "trackName": "Music Sounds Better With You",
+      "year": 1998,
       "youtubeVideoId": "FQlAEiCb8m0"
     }
   },
   {
     "originalSample": {
-      "artist": "Siffre",
+      "artist": "Labi Siffre",
       "trackName": "I Got the",
+      "year": 1975,
       "youtubeVideoId": "50eiiYyqG6k",
       "startTime": 101,
       "duration": 15
@@ -167,6 +190,7 @@
     "newSong": {
       "artist": "Eminem",
       "trackName": "My Name Is",
+      "year": 1999,
       "youtubeVideoId": "sNPnbI1arSE",
       "startTime": 8
     }
@@ -175,6 +199,7 @@
     "originalSample": {
       "artist": "Carlton Williams",
       "trackName": "Prison Song",
+      "year": 1976,
       "youtubeVideoId": "s6F37L7vtyw",
       "startTime": 0,
       "duration": 15
@@ -182,6 +207,7 @@
     "newSong": {
       "artist": "Future",
       "trackName": "Mask Off",
+      "year": 2017,
       "youtubeVideoId": "xvZqHgFz51I",
       "startTime": 84
     }
@@ -190,6 +216,7 @@
     "originalSample": {
       "artist": "Timmy Thomas",
       "trackName": "Why Can't We Live Together",
+      "year": 1972,
       "youtubeVideoId": "hULALx9PuXA",
       "startTime": 0,
       "duration": 15
@@ -197,6 +224,7 @@
     "newSong": {
       "artist": "Drake",
       "trackName": "Hotline Bling",
+      "year": 2015,
       "youtubeVideoId": "uxpDa-c-4Mc",
       "startTime": 20
     }
@@ -205,6 +233,7 @@
     "originalSample": {
       "artist": "Marvin Gaye",
       "trackName": "Ain't No Mountain High Enough",
+      "year": 1967,
       "youtubeVideoId": "ABfQuZqq8wg",
       "startTime": 0,
       "duration": 15
@@ -212,6 +241,7 @@
     "newSong": {
       "artist": "Amy Winehouse",
       "trackName": "Tears Dry On Their Own",
+      "year": 2006,
       "youtubeVideoId": "ojdbDYahiCQ"
     }
   },
@@ -219,6 +249,7 @@
     "originalSample": {
       "artist": "Curtis Mayfield",
       "trackName": "Move On Up",
+      "year": 1970,
       "youtubeVideoId": "A9RMr9KuVZo",
       "startTime": 0,
       "duration": 15
@@ -226,6 +257,7 @@
     "newSong": {
       "artist": "Kanye West",
       "trackName": "Touch The Sky",
+      "year": 2005,
       "youtubeVideoId": "YkwQbuAGLj4",
       "startTime": 18
     }
@@ -234,6 +266,7 @@
     "originalSample": {
       "artist": "Stevie Wonder",
       "trackName": "Pastime Paradise",
+      "year": 1976,
       "youtubeVideoId": "_H3Sv2zad6s",
       "startTime": 0,
       "duration": 20
@@ -241,6 +274,7 @@
     "newSong": {
       "artist": "Coolio",
       "trackName": "Gangsta's Paradise",
+      "year": 1995,
       "youtubeVideoId": "fPO76Jlnz6c",
       "startTime": 14
     }
@@ -249,6 +283,7 @@
     "originalSample": {
       "artist": "Barry White",
       "trackName": "It's Ecstasy When You Lay Next To Me",
+      "year": 1977,
       "youtubeVideoId": "dk5WCc1iEwk",
       "startTime": 0,
       "duration": 15
@@ -256,6 +291,7 @@
     "newSong": {
       "artist": "Robbie Williams",
       "trackName": "Rock DJ",
+      "year": 2000,
       "youtubeVideoId": "BnO3nijfYmU"
     }
   },
@@ -263,6 +299,7 @@
     "originalSample": {
       "artist": "Ray Charles",
       "trackName": "I Got A Woman",
+      "year": 1954,
       "youtubeVideoId": "CnI_LuCJ4Ek",
       "startTime": 0,
       "duration": 15
@@ -270,6 +307,7 @@
     "newSong": {
       "artist": "Kanye West Feat. Jamie Foxx",
       "trackName": "Gold Digger",
+      "year": 2005,
       "youtubeVideoId": "6vwNcNOTVzY",
       "startTime": 6
     }
@@ -278,6 +316,7 @@
     "originalSample": {
       "artist": "Rick James",
       "trackName": "Super Freak",
+      "year": 1981,
       "youtubeVideoId": "QYHxGBH6o4M",
       "startTime": 0,
       "duration": 15
@@ -285,6 +324,7 @@
     "newSong": {
       "artist": "MC Hammer",
       "trackName": "U Can't Touch This",
+      "year": 1990,
       "youtubeVideoId": "otCpCn0l4Wo",
       "startTime": 16
     }
@@ -293,6 +333,7 @@
     "originalSample": {
       "artist": "The Isley Brothers",
       "trackName": "That Lady",
+      "year": 1973,
       "youtubeVideoId": "S1Mvy3E8P2U",
       "startTime": 0,
       "duration": 15
@@ -300,6 +341,7 @@
     "newSong": {
       "artist": "Kendrick Lamar",
       "trackName": "i",
+      "year": 2014,
       "youtubeVideoId": "8aShfolR6w8",
       "startTime": 47
     }

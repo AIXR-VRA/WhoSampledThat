@@ -612,6 +612,7 @@ function GameRound() {
                   <div className="track-details px-6 py-2">
                     <div className="font-black text-white text-lg">{currentTrack.originalSample.artist}</div>
                     <div className="text-gray-300 text-sm font-medium">{currentTrack.originalSample.trackName}</div>
+                    <div className="text-cyan-300 text-xs font-medium">({currentTrack.originalSample.year})</div>
                   </div>
                 </div>
               )}
@@ -693,6 +694,7 @@ function GameRound() {
                   <div className="track-details px-6 py-2">
                     <div className="font-black text-white text-lg">{currentTrack.newSong.artist}</div>
                     <div className="text-gray-300 text-sm font-medium">{currentTrack.newSong.trackName}</div>
+                    <div className="text-cyan-300 text-xs font-medium">({currentTrack.newSong.year})</div>
                   </div>
                 </div>
               )}
@@ -778,6 +780,7 @@ function GameRound() {
                   <div className="track-details px-3 py-2">
                     <div className="font-black text-white text-sm">{currentTrack.originalSample.artist}</div>
                     <div className="text-gray-300 text-xs font-medium">{currentTrack.originalSample.trackName}</div>
+                    <div className="text-cyan-300 text-xs font-medium">({currentTrack.originalSample.year})</div>
                   </div>
                 </div>
               )}
@@ -859,6 +862,7 @@ function GameRound() {
                   <div className="track-details px-3 py-2">
                     <div className="font-black text-white text-sm">{currentTrack.newSong.artist}</div>
                     <div className="text-gray-300 text-xs font-medium">{currentTrack.newSong.trackName}</div>
+                    <div className="text-cyan-300 text-xs font-medium">({currentTrack.newSong.year})</div>
                   </div>
                 </div>
               )}

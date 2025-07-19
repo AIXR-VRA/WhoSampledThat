@@ -20,6 +20,7 @@ interface Track {
   originalSample: {
     artist: string;
     trackName: string;
+    year: number;
     youtubeVideoId: string;
     startTime?: number;
     duration?: number;
@@ -27,6 +28,7 @@ interface Track {
   newSong: {
     artist: string;
     trackName: string;
+    year: number;
     youtubeVideoId: string;
     startTime?: number;
     duration?: number;
