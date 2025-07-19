@@ -254,21 +254,23 @@ async function generateShareImage(baseImageBuffer, scores) {
                 gap: '40px'
               },
               children: scores.slice(0, 3).map((player, index) => {
-                const position = index === 0 ? '1st' : index === 1 ? '2nd' : '3rd';
+                // Use same emoji format as App.tsx
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
                 return {
                   type: 'div',
                   key: index,
                   props: {
                     style: {
                       display: 'flex',
+                      flexDirection: 'column',
                       alignItems: 'center',
-                      justifyContent: 'space-between',
-                      backgroundColor: 'rgba(15, 23, 42, 0.85)', // Dark slate with more opacity to match player-card
-                      padding: '24px',
-                      borderRadius: '20px', // Slightly smaller radius to match modern-card
+                      // Match the player-card gradient from App.tsx
+                      background: 'linear-gradient(135deg, rgba(255, 107, 157, 0.18) 0%, rgba(78, 205, 196, 0.15) 25%, rgba(255, 230, 109, 0.18) 50%, rgba(144, 19, 254, 0.15) 75%, rgba(255, 107, 157, 0.18) 100%)',
+                      border: '1px solid rgba(255, 255, 255, 0.25)',
+                      borderRadius: '20px',
+                      padding: '30px',
                       width: '100%',
-                      marginBottom: '24px',
-                      border: '1px solid rgba(255, 255, 255, 0.1)' // Subtle border like modern cards
+                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
                     },
                     children: [
                       {
@@ -277,30 +279,32 @@ async function generateShareImage(baseImageBuffer, scores) {
                           style: {
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '20px'
+                            justifyContent: 'center',
+                            gap: '20px',
+                            marginBottom: '15px'
                           },
                           children: [
                             {
                               type: 'div',
                               props: {
                                 style: {
-                                  fontSize: '48px',
-                                  fontWeight: 'bold',
+                                  fontSize: '70px',
+                                  // Match App.tsx: same color as name (white)
                                   color: '#FFFFFF',
-                                  textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-                                  minWidth: '80px'
+                                  fontWeight: '900',
+                                  textShadow: '3px 3px 6px rgba(0,0,0,0.8)'
                                 },
-                                children: `${position}.`
+                                children: medal
                               }
                             },
                             {
                               type: 'div',
                               props: {
                                 style: {
-                                  fontSize: '54px',
-                                  fontWeight: 'bold',
+                                  fontSize: '60px',
+                                  fontWeight: '900',
                                   color: '#FFFFFF',
-                                  textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                                  textShadow: '3px 3px 6px rgba(0,0,0,0.8)'
                                 },
                                 children: player.name
                               }
@@ -312,34 +316,13 @@ async function generateShareImage(baseImageBuffer, scores) {
                         type: 'div',
                         props: {
                           style: {
-                            textAlign: 'right'
+                            fontSize: '48px',
+                            fontWeight: '900',
+                            color: '#FFFFFF',
+                            textShadow: '3px 3px 6px rgba(0,0,0,0.8)',
+                            textAlign: 'center'
                           },
-                          children: [
-                            {
-                              type: 'div',
-                              props: {
-                                style: {
-                                  fontSize: '56px',
-                                  fontWeight: 'bold',
-                                  color: '#FFFFFF',
-                                  textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
-                                },
-                                children: player.score
-                              }
-                            },
-                            {
-                              type: 'div',
-                              props: {
-                                style: {
-                                  fontSize: '32px',
-                                  fontWeight: '600',
-                                  color: 'rgba(156, 163, 175, 1)', // Gray-400 equivalent
-                                  textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
-                                },
-                                children: 'points'
-                              }
-                            }
-                          ]
+                          children: `${player.score} pts`
                         }
                       }
                     ]
