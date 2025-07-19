@@ -254,8 +254,7 @@ async function generateShareImage(baseImageBuffer, scores) {
                 gap: '40px'
               },
               children: scores.slice(0, 3).map((player, index) => {
-                // Use same emoji format as App.tsx
-                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
+                const medal = index === 0 ? '1st' : index === 1 ? '2nd' : '3rd';
                 return {
                   type: 'div',
                   key: index,
@@ -264,13 +263,10 @@ async function generateShareImage(baseImageBuffer, scores) {
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
-                      // Match the player-card gradient from App.tsx
-                      background: 'linear-gradient(135deg, rgba(255, 107, 157, 0.18) 0%, rgba(78, 205, 196, 0.15) 25%, rgba(255, 230, 109, 0.18) 50%, rgba(144, 19, 254, 0.15) 75%, rgba(255, 107, 157, 0.18) 100%)',
-                      border: '1px solid rgba(255, 255, 255, 0.25)',
-                      borderRadius: '20px',
+                      backgroundColor: 'rgba(0, 0, 0, 0.8)',
                       padding: '30px',
-                      width: '100%',
-                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
+                      borderRadius: '25px',
+                      width: '100%'
                     },
                     children: [
                       {
@@ -289,9 +285,7 @@ async function generateShareImage(baseImageBuffer, scores) {
                               props: {
                                 style: {
                                   fontSize: '70px',
-                                  // Match App.tsx: same color as name (white)
                                   color: '#FFFFFF',
-                                  fontWeight: '900',
                                   textShadow: '3px 3px 6px rgba(0,0,0,0.8)'
                                 },
                                 children: medal
@@ -302,7 +296,7 @@ async function generateShareImage(baseImageBuffer, scores) {
                               props: {
                                 style: {
                                   fontSize: '60px',
-                                  fontWeight: '900',
+                                  fontWeight: 'bold',
                                   color: '#FFFFFF',
                                   textShadow: '3px 3px 6px rgba(0,0,0,0.8)'
                                 },
@@ -317,8 +311,8 @@ async function generateShareImage(baseImageBuffer, scores) {
                         props: {
                           style: {
                             fontSize: '48px',
-                            fontWeight: '900',
-                            color: '#FFFFFF',
+                            fontWeight: 'bold',
+                            color: '#FFD700',
                             textShadow: '3px 3px 6px rgba(0,0,0,0.8)',
                             textAlign: 'center'
                           },
