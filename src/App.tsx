@@ -83,10 +83,6 @@ function FinalScoresLeaderboard() {
     return { ...player, position };
   });
 
-  // Find the highest score to determine winners
-  const highestScore = sortedPlayers.length > 0 ? sortedPlayers[0].score : 0;
-  const winners = sortedPlayers.filter(player => player.score === highestScore);
-  
   // Generate share image URL and update browser URL
   useEffect(() => {
     const updateUrlAndImage = async () => {
