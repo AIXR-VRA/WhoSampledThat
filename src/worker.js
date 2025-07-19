@@ -195,16 +195,13 @@ async function generateShareImage(baseImageBuffer, scores) {
     // Convert base image to base64 for background
     const base64Image = `data:image/png;base64,${btoa(String.fromCharCode(...new Uint8Array(baseImageBuffer)))}`;
     
-    // Always use square dimensions
-    const dimensions = { width: 1080, height: 1080 };
-    
-    // Create JSX component with base image background and scores
+    // Create JSX component with square base image background and centered scores
     const jsx = {
       type: 'div',
       props: {
         style: {
-          height: `${dimensions.height}px`,
-          width: `${dimensions.width}px`,
+          height: '1080px',
+          width: '1080px',
           display: 'flex',
           position: 'relative',
           backgroundImage: `url(${base64Image})`,
@@ -213,7 +210,7 @@ async function generateShareImage(baseImageBuffer, scores) {
           fontFamily: 'Arial, sans-serif'
         },
         children: [
-          // Scores container - always centered for square layout
+          // Centered scores container for square format
           {
             type: 'div',
             props: {
@@ -222,7 +219,7 @@ async function generateShareImage(baseImageBuffer, scores) {
                 left: '50%',
                 top: '50%',
                 transform: 'translate(-50%, -50%)',
-                width: '800px',
+                width: '700px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -230,27 +227,19 @@ async function generateShareImage(baseImageBuffer, scores) {
                 gap: '40px'
               },
               children: scores.slice(0, 3).map((player, index) => {
-                const position = index === 0 ? '1st' : index === 1 ? '2nd' : '3rd';
-                const isWinner = index === 0;
-                
+                const medal = index === 0 ? '1st' : index === 1 ? '2nd' : '3rd';
                 return {
                   type: 'div',
                   key: index,
                   props: {
                     style: {
                       display: 'flex',
+                      flexDirection: 'column',
                       alignItems: 'center',
-                      justifyContent: 'space-between',
-                      width: '100%',
-                      // Match leaderboard gradient style
-                      background: isWinner 
-                        ? 'linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 165, 0, 0.2) 100%)'
-                        : 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
-                      border: isWinner ? '2px solid rgba(255, 215, 0, 0.5)' : '1px solid rgba(255, 255, 255, 0.2)',
-                      padding: '20px 30px',
-                      borderRadius: '20px',
-                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-                      backdropFilter: 'blur(10px)'
+                      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                      padding: '30px',
+                      borderRadius: '25px',
+                      width: '100%'
                     },
                     children: [
                       {
@@ -259,30 +248,28 @@ async function generateShareImage(baseImageBuffer, scores) {
                           style: {
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '20px'
+                            justifyContent: 'center',
+                            gap: '20px',
+                            marginBottom: '15px'
                           },
                           children: [
                             {
                               type: 'div',
                               props: {
                                 style: {
-                                  fontSize: '50px',
-                                  fontWeight: 'bold',
-                                  color: isWinner ? '#FFD700' : '#FFFFFF',
-                                  textShadow: '2px 2px 8px rgba(0,0,0,0.8)',
-                                  minWidth: '80px'
+                                  fontSize: '70px'
                                 },
-                                children: position
+                                children: medal
                               }
                             },
                             {
                               type: 'div',
                               props: {
                                 style: {
-                                  fontSize: '48px',
+                                  fontSize: '60px',
                                   fontWeight: 'bold',
-                                  color: isWinner ? '#FFFFFF' : '#FFFFFF',
-                                  textShadow: '2px 2px 8px rgba(0,0,0,0.8)'
+                                  color: '#FFFFFF',
+                                  textShadow: '3px 3px 6px rgba(0,0,0,0.8)'
                                 },
                                 children: player.name
                               }
@@ -297,7 +284,8 @@ async function generateShareImage(baseImageBuffer, scores) {
                             fontSize: '48px',
                             fontWeight: 'bold',
                             color: '#FFD700',
-                            textShadow: '2px 2px 8px rgba(0,0,0,0.8)'
+                            textShadow: '3px 3px 6px rgba(0,0,0,0.8)',
+                            textAlign: 'center'
                           },
                           children: `${player.score} pts`
                         }
@@ -314,8 +302,8 @@ async function generateShareImage(baseImageBuffer, scores) {
 
     // Generate the image using ImageResponse from workers-og
     const response = new ImageResponse(jsx, {
-      width: dimensions.width,
-      height: dimensions.height,
+      width: 1080,
+      height: 1080,
     });
     
     return await response.arrayBuffer();
