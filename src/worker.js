@@ -187,145 +187,150 @@ async function handleShareImage(request, env) {
 
 async function generateShareImage(baseImageBuffer, scores) {
   try {
-    // Import the ImageResponse from workers-og (the correct library for Cloudflare Workers)
-    const { ImageResponse } = await import('workers-og');
-    
-    // Convert base image buffer to base64 for use as background
-    const base64Image = Buffer.from(baseImageBuffer).toString('base64');
-    
-    // Create JSX component that overlays scores on the base image
-    const jsx = {
-      type: 'div',
-      props: {
-        style: {
-          height: '630px',
-          width: '1200px',
-          display: 'flex',
-          backgroundImage: `url(data:image/png;base64,${base64Image})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          position: 'relative',
-          fontFamily: 'Arial, sans-serif'
-        },
-        children: [
-          // Safe zone container (right side red area)
-          {
-            type: 'div',
-            props: {
-              style: {
-                position: 'absolute',
-                right: '0px',
-                top: '0px',
-                width: '620px', // Width of red safe zone
-                height: '630px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '40px'
-              },
-              children: [
-                // Just the scores - clean and simple
-                {
-                  type: 'div',
-                  props: {
-                    style: {
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '30px',
-                      alignItems: 'center',
-                      width: '100%'
-                    },
-                    children: scores.slice(0, 3).map((player, index) => {
-                      const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
-                      return {
-                        type: 'div',
-                        key: index,
-                        props: {
-                          style: {
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            textAlign: 'center',
-                            color: '#FFFFFF',
-                            textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
-                          },
-                          children: [
-                            // Medal and name
-                            {
-                              type: 'div',
-                              props: {
-                                style: {
-                                  fontSize: '36px',
-                                  fontWeight: 'bold',
-                                  marginBottom: '8px'
-                                },
-                                children: `${medal} ${player.name}`
-                              }
-                            },
-                            // Score
-                            {
-                              type: 'div',
-                              props: {
-                                style: {
-                                  fontSize: '28px',
-                                  fontWeight: 'bold',
-                                  color: '#FFD700',
-                                  textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
-                                },
-                                children: `${player.score} pts`
-                              }
-                            }
-                          ]
-                        }
-                      };
-                    })
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    };
-
-    // Generate the image using ImageResponse from workers-og
-    const response = new ImageResponse(jsx, {
-      width: 1200,
-      height: 630,
-    });
-    
-    return await response.arrayBuffer();
-  } catch (error) {
-    console.error('Error generating image with workers-og:', error);
-    
-    // Fallback: return a simple SVG
-    const fallbackSvg = `
-      <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+    // Use Cloudflare's native image transformation to overlay text on the base image
+    // First, let's create an SVG overlay with just the scores
+    const svgOverlay = `
+      <svg width="620" height="630" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#1f2937;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#374151;stop-opacity:1" />
-          </linearGradient>
+          <style>
+            .score-text { 
+              font-family: Arial, sans-serif; 
+              font-weight: bold; 
+              text-anchor: middle;
+              fill: white;
+              paint-order: stroke fill;
+              stroke: rgba(0,0,0,0.8);
+              stroke-width: 2px;
+            }
+            .score-number { 
+              font-family: Arial, sans-serif; 
+              font-weight: bold; 
+              text-anchor: middle;
+              fill: #FFD700;
+              paint-order: stroke fill;
+              stroke: rgba(0,0,0,0.8);
+              stroke-width: 2px;
+            }
+          </style>
         </defs>
-        <rect width="1200" height="630" fill="url(#grad1)"/>
-        <text x="600" y="150" font-family="Arial" font-size="48" fill="white" text-anchor="middle" font-weight="bold">🎵 Who Sampled That? 🎵</text>
-        <text x="600" y="220" font-family="Arial" font-size="36" fill="#FFD700" text-anchor="middle" font-weight="bold">FINAL SCORES! 🏆</text>
         ${scores.slice(0, 3).map((player, index) => {
           const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
-          const y = 320 + (index * 80);
+          const y = 200 + (index * 100);
           return `
-            <rect x="300" y="${y - 35}" width="600" height="60" fill="rgba(255, 255, 255, 0.1)" rx="15"/>
-            <text x="330" y="${y}" font-family="Arial" font-size="32" fill="white" font-weight="bold">${medal} ${player.name}</text>
-            <text x="870" y="${y}" font-family="Arial" font-size="32" fill="#FFD700" text-anchor="end" font-weight="bold">${player.score} pts</text>
+            <text x="310" y="${y}" font-size="36" class="score-text">${medal} ${player.name}</text>
+            <text x="310" y="${y + 35}" font-size="28" class="score-number">${player.score} pts</text>
           `;
         }).join('')}
-        <text x="600" y="580" font-family="Arial" font-size="24" fill="#9CA3AF" text-anchor="middle">Play at whosampledthat.com</text>
       </svg>
     `;
+
+    // Convert SVG to a data URL
+    const svgDataUrl = `data:image/svg+xml;base64,${btoa(svgOverlay)}`;
     
-    return new Response(fallbackSvg, {
-      headers: { 'Content-Type': 'image/svg+xml' }
-    }).arrayBuffer();
+    // Use Cloudflare Images transformation to composite the overlay onto the base image
+    const response = await fetch(svgDataUrl, {
+      cf: {
+        image: {
+          // First create a background from our base image (we'll serve it from a temporary URL)
+          draw: [{
+            url: `data:image/png;base64,${Buffer.from(baseImageBuffer).toString('base64')}`,
+            fit: 'cover',
+            width: 1200,
+            height: 630
+          }],
+          width: 1200,
+          height: 630,
+          format: 'png'
+        }
+      }
+    });
+
+    if (response.ok) {
+      return await response.arrayBuffer();
+    } else {
+      throw new Error('Image transformation failed');
+    }
+    
+  } catch (error) {
+    console.error('Error generating image with Cloudflare Images:', error);
+    
+    // Fallback: Composite using a different approach - create a new image entirely
+    try {
+      // Create a canvas-style approach using SVG that includes the background
+      const compositeSvg = `
+        <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <defs>
+            <style>
+              .score-text { 
+                font-family: Arial, sans-serif; 
+                font-weight: bold; 
+                text-anchor: middle;
+                fill: white;
+                paint-order: stroke fill;
+                stroke: rgba(0,0,0,0.8);
+                stroke-width: 3px;
+                stroke-linejoin: round;
+              }
+              .score-number { 
+                font-family: Arial, sans-serif; 
+                font-weight: bold; 
+                text-anchor: middle;
+                fill: #FFD700;
+                paint-order: stroke fill;
+                stroke: rgba(0,0,0,0.8);
+                stroke-width: 3px;
+                stroke-linejoin: round;
+              }
+            </style>
+          </defs>
+          
+          <!-- Background image (base64 embedded) -->
+          <image x="0" y="0" width="1200" height="630" 
+                 xlink:href="data:image/png;base64,${Buffer.from(baseImageBuffer).toString('base64')}" />
+          
+          <!-- Safe zone overlay (right side) -->
+          <g transform="translate(580, 0)">
+            <!-- Semi-transparent background for better text readability -->
+            <rect x="0" y="0" width="620" height="630" fill="rgba(255,0,0,0.1)" />
+            
+            <!-- Score text positioned in safe zone -->
+            ${scores.slice(0, 3).map((player, index) => {
+              const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
+              const y = 200 + (index * 120);
+              return `
+                <text x="310" y="${y}" font-size="42" class="score-text">${medal} ${player.name}</text>
+                <text x="310" y="${y + 45}" font-size="32" class="score-number">${player.score} pts</text>
+              `;
+            }).join('')}
+          </g>
+        </svg>
+      `;
+      
+      return new Response(compositeSvg, {
+        headers: { 'Content-Type': 'image/svg+xml' }
+      }).arrayBuffer();
+      
+    } catch (finalError) {
+      console.error('Final fallback failed:', finalError);
+      
+      // Ultimate fallback - simple text-based SVG
+      const simpleSvg = `
+        <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+          <rect width="1200" height="630" fill="#1f2937"/>
+          <text x="600" y="150" font-family="Arial" font-size="48" fill="white" text-anchor="middle" font-weight="bold">🎵 Who Sampled That? 🎵</text>
+          <text x="600" y="220" font-family="Arial" font-size="36" fill="#FFD700" text-anchor="middle" font-weight="bold">FINAL SCORES! 🏆</text>
+          ${scores.slice(0, 3).map((player, index) => {
+            const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
+            const y = 320 + (index * 80);
+            return `<text x="600" y="${y}" font-family="Arial" font-size="32" fill="white" text-anchor="middle" font-weight="bold">${medal} ${player.name}: ${player.score} pts</text>`;
+          }).join('')}
+          <text x="600" y="580" font-family="Arial" font-size="24" fill="#9CA3AF" text-anchor="middle">Play at whosampledthat.com</text>
+        </svg>
+      `;
+      
+      return new Response(simpleSvg, {
+        headers: { 'Content-Type': 'image/svg+xml' }
+      }).arrayBuffer();
+    }
   }
 } 
