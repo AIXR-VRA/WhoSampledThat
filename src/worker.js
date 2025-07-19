@@ -268,8 +268,7 @@ async function generateShareImage(baseImageBuffer, scores) {
                       borderRadius: '20px', // Slightly smaller radius to match modern-card
                       width: '100%',
                       marginBottom: '24px',
-                      border: '1px solid rgba(255, 255, 255, 0.1)', // Subtle border like modern cards
-                      backdropFilter: 'blur(4px)' // Subtle blur effect
+                      border: '1px solid rgba(255, 255, 255, 0.1)' // Subtle border like modern cards
                     },
                     children: [
                       {
