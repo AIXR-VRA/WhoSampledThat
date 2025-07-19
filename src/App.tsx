@@ -3,6 +3,7 @@ import { GameProvider, useGame } from './contexts/GameContext';
 import GameRound from './pages/GameRound';
 import SettingsDropdown from './components/SettingsDropdown';
 import InfoDropdown from './components/InfoDropdown';
+import PrivacyPolicy from './components/PrivacyPolicy';
 import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { LogOut, AlertTriangle, Trophy, Sparkles } from 'lucide-react';
 import { useState } from 'react';
@@ -275,10 +276,29 @@ function AppHeader() {
 }
 
 function Footer() {
+  const [isPrivacyPolicyOpen, setIsPrivacyPolicyOpen] = useState(false);
+  const currentYear = new Date().getFullYear();
+
   return (
-    <div className="text-center py-6 text-gray-400 text-sm">
-      Made with ❤️ by Ryza © 2024
-    </div>
+    <>
+      <div className="text-center py-6 text-gray-400 text-sm">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
+          <span>Made with ❤️ by Ryza © {currentYear}</span>
+          <span className="hidden sm:inline">•</span>
+          <button
+            onClick={() => setIsPrivacyPolicyOpen(true)}
+            className="text-gray-400 hover:text-white transition-colors underline"
+          >
+            Privacy & Terms
+          </button>
+        </div>
+      </div>
+      
+      <PrivacyPolicy 
+        isOpen={isPrivacyPolicyOpen} 
+        onClose={() => setIsPrivacyPolicyOpen(false)} 
+      />
+    </>
   );
 }
 
