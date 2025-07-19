@@ -167,6 +167,7 @@ body::before {
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
   position: relative;
   overflow: hidden;
+  will-change: transform, background, box-shadow;
 }
 
 .modern-button::before {
@@ -310,6 +311,7 @@ body::before {
   box-shadow: 
     0 8px 32px rgba(0, 0, 0, 0.4),
     0 0 15px rgba(255, 107, 157, 0.12);
+  will-change: transform, box-shadow;
 }
 
 .player-card::before {
@@ -408,6 +410,7 @@ body::before {
   transform-origin: center;
   transition: all 0.1s ease;
   box-shadow: 0 0 3px rgba(78, 205, 196, 0.3);
+  will-change: transform, opacity, background;
 }
 
 .waveform-bar.animate {
@@ -428,155 +431,163 @@ body::before {
   }
 }
 
-/* Toned down background gradient animations */
+/* Performance optimized background gradient animations */
 @keyframes gradient-shift {
   0%, 100% {
-    transform: scale(1) rotate(0deg);
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
     filter: hue-rotate(0deg) saturate(1.1);
   }
   25% {
-    transform: scale(1.05) rotate(90deg);
-    filter: hue-rotate(60deg) saturate(1.2);
+    transform: translate3d(0, 0, 0) scale(1.02) rotate(90deg);
+    filter: hue-rotate(30deg) saturate(1.15);
   }
   50% {
-    transform: scale(0.95) rotate(180deg);
-    filter: hue-rotate(120deg) saturate(1.3);
+    transform: translate3d(0, 0, 0) scale(0.98) rotate(180deg);
+    filter: hue-rotate(60deg) saturate(1.2);
   }
   75% {
-    transform: scale(1.02) rotate(270deg);
-    filter: hue-rotate(180deg) saturate(1.15);
+    transform: translate3d(0, 0, 0) scale(1.01) rotate(270deg);
+    filter: hue-rotate(90deg) saturate(1.1);
   }
 }
 
 @keyframes gradient-shift-reverse {
   0%, 100% {
-    transform: scale(1) rotate(0deg);
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
     filter: hue-rotate(0deg) saturate(1.05);
   }
   25% {
-    transform: scale(0.98) rotate(-90deg);
-    filter: hue-rotate(-60deg) saturate(1.15);
+    transform: translate3d(0, 0, 0) scale(0.99) rotate(-90deg);
+    filter: hue-rotate(-30deg) saturate(1.1);
   }
   50% {
-    transform: scale(1.05) rotate(-180deg);
-    filter: hue-rotate(-120deg) saturate(1.25);
+    transform: translate3d(0, 0, 0) scale(1.02) rotate(-180deg);
+    filter: hue-rotate(-60deg) saturate(1.15);
   }
   75% {
-    transform: scale(0.95) rotate(-270deg);
-    filter: hue-rotate(-180deg) saturate(1.1);
+    transform: translate3d(0, 0, 0) scale(0.98) rotate(-270deg);
+    filter: hue-rotate(-90deg) saturate(1.05);
   }
 }
 
-/* Floating animations for musical notes */
+/* Hardware-accelerated floating animations for musical notes */
 @keyframes float-1 {
   0%, 100% {
-    transform: translateY(0px) translateX(0px) rotate(0deg);
+    transform: translate3d(0px, 0px, 0) rotate(0deg);
   }
   25% {
-    transform: translateY(-20px) translateX(10px) rotate(5deg);
+    transform: translate3d(10px, -20px, 0) rotate(5deg);
   }
   50% {
-    transform: translateY(10px) translateX(-5px) rotate(-3deg);
+    transform: translate3d(-5px, 10px, 0) rotate(-3deg);
   }
   75% {
-    transform: translateY(-15px) translateX(15px) rotate(8deg);
+    transform: translate3d(15px, -15px, 0) rotate(8deg);
   }
 }
 
 @keyframes float-2 {
   0%, 100% {
-    transform: translateY(0px) translateX(0px) rotate(0deg);
+    transform: translate3d(0px, 0px, 0) rotate(0deg);
   }
   33% {
-    transform: translateY(25px) translateX(-15px) rotate(-8deg);
+    transform: translate3d(-15px, 25px, 0) rotate(-8deg);
   }
   66% {
-    transform: translateY(-10px) translateX(20px) rotate(6deg);
+    transform: translate3d(20px, -10px, 0) rotate(6deg);
   }
 }
 
 @keyframes float-3 {
   0%, 100% {
-    transform: translateY(0px) translateX(0px) rotate(0deg);
+    transform: translate3d(0px, 0px, 0) rotate(0deg);
   }
   20% {
-    transform: translateY(-30px) translateX(12px) rotate(10deg);
+    transform: translate3d(12px, -30px, 0) rotate(10deg);
   }
   40% {
-    transform: translateY(15px) translateX(-8px) rotate(-5deg);
+    transform: translate3d(-8px, 15px, 0) rotate(-5deg);
   }
   60% {
-    transform: translateY(-5px) translateX(18px) rotate(12deg);
+    transform: translate3d(18px, -5px, 0) rotate(12deg);
   }
   80% {
-    transform: translateY(20px) translateX(-12px) rotate(-7deg);
+    transform: translate3d(-12px, 20px, 0) rotate(-7deg);
   }
 }
 
 @keyframes float-4 {
   0%, 100% {
-    transform: translateY(0px) translateX(0px) rotate(0deg);
+    transform: translate3d(0px, 0px, 0) rotate(0deg);
   }
   50% {
-    transform: translateY(-25px) translateX(25px) rotate(15deg);
+    transform: translate3d(25px, -25px, 0) rotate(15deg);
   }
 }
 
 @keyframes float-5 {
   0%, 100% {
-    transform: translateY(0px) translateX(0px) rotate(0deg);
+    transform: translate3d(0px, 0px, 0) rotate(0deg);
   }
   30% {
-    transform: translateY(20px) translateX(-20px) rotate(-12deg);
+    transform: translate3d(-20px, 20px, 0) rotate(-12deg);
   }
   70% {
-    transform: translateY(-15px) translateX(10px) rotate(9deg);
+    transform: translate3d(10px, -15px, 0) rotate(9deg);
   }
 }
 
 @keyframes float-6 {
   0%, 100% {
-    transform: translateY(0px) translateX(0px) rotate(0deg);
+    transform: translate3d(0px, 0px, 0) rotate(0deg);
   }
   40% {
-    transform: translateY(-18px) translateX(-25px) rotate(-15deg);
+    transform: translate3d(-25px, -18px, 0) rotate(-15deg);
   }
   80% {
-    transform: translateY(12px) translateX(15px) rotate(8deg);
+    transform: translate3d(15px, 12px, 0) rotate(8deg);
   }
 }
 
-/* Apply animations */
+/* Apply animations with performance optimization */
 .animate-gradient-shift {
   animation: gradient-shift 15s ease-in-out infinite;
+  will-change: transform, filter;
 }
 
 .animate-gradient-shift-reverse {
   animation: gradient-shift-reverse 20s ease-in-out infinite;
+  will-change: transform, filter;
 }
 
 .animate-float-1 {
   animation: float-1 8s ease-in-out infinite;
+  will-change: transform;
 }
 
 .animate-float-2 {
   animation: float-2 12s ease-in-out infinite;
+  will-change: transform;
 }
 
 .animate-float-3 {
   animation: float-3 10s ease-in-out infinite;
+  will-change: transform;
 }
 
 .animate-float-4 {
   animation: float-4 6s ease-in-out infinite;
+  will-change: transform;
 }
 
 .animate-float-5 {
   animation: float-5 14s ease-in-out infinite;
+  will-change: transform;
 }
 
 .animate-float-6 {
   animation: float-6 9s ease-in-out infinite;
+  will-change: transform;
 }
 
 /* Toned down Musical Notes */
@@ -913,4 +924,76 @@ body::before {
   color: rgba(255, 165, 0, 0.25);
   opacity: 0.6;
   text-shadow: 0 0 8px rgba(255, 165, 0, 0.2);
+}
+
+/* Mobile performance optimizations - reduce animation complexity on smaller screens */
+@media (max-width: 768px) {
+  /* Reduce background grain animation on mobile */
+  body::before {
+    animation: none;
+    opacity: 0.08;
+  }
+  
+  /* Simplify gradient animations on mobile */
+  .animate-gradient-shift {
+    animation: gradient-shift 25s ease-in-out infinite;
+  }
+  
+  .animate-gradient-shift-reverse {
+    animation: gradient-shift-reverse 30s ease-in-out infinite;
+  }
+  
+  /* Reduce grain texture complexity on musical notes */
+  .y2k-note-purple::after,
+  .y2k-note-cyan::after,
+  .y2k-note-pink::after,
+  .y2k-note-lime::after,
+  .y2k-note-orange::after,
+  .y2k-note-blue::after,
+  .y2k-note-magenta::after,
+  .y2k-note-gold::after,
+  .y2k-note-teal::after,
+  .y2k-note-lavender::after {
+    animation: none;
+    opacity: 0.1;
+  }
+  
+  /* Optimize backdrop filters on mobile */
+  .modern-card,
+  .player-card,
+  .video-container,
+  .track-details {
+    backdrop-filter: blur(10px);
+  }
+  
+  /* Reduce waveform animation frequency on mobile */
+  .waveform-bar.animate {
+    animation: waveform-pulse 1.8s ease-in-out infinite;
+  }
+}
+
+/* Further optimizations for very small screens */
+@media (max-width: 480px) {
+  /* Disable some complex animations on very small screens */
+  .animate-gradient-shift,
+  .animate-gradient-shift-reverse {
+    animation: none;
+  }
+  
+  /* Reduce backdrop blur intensity further */
+  .modern-card,
+  .player-card,
+  .video-container,
+  .track-details {
+    backdrop-filter: blur(5px);
+  }
+  
+  /* Simplify button hover effects */
+  .modern-button:hover {
+    transform: none;
+  }
+  
+  .player-card:hover {
+    transform: none;
+  }
 }

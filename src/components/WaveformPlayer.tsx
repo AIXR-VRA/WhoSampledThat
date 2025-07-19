@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo, useMemo } from 'react';
 
 interface WaveformPlayerProps {
   isPlaying: boolean;
@@ -6,7 +6,7 @@ interface WaveformPlayerProps {
   onTimeUpdate?: (currentTime: number) => void;
 }
 
-function WaveformPlayer({ isPlaying, duration, onTimeUpdate }: WaveformPlayerProps) {
+const WaveformPlayer = memo(({ isPlaying, duration, onTimeUpdate }: WaveformPlayerProps) => {
   const [currentTime, setCurrentTime] = useState(0);
 
   useEffect(() => {
@@ -41,22 +41,27 @@ function WaveformPlayer({ isPlaying, duration, onTimeUpdate }: WaveformPlayerPro
   const seconds = Math.floor(remainingTime % 60);
   const formattedTime = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
-  // Generate waveform bars with consistent heights for this render
-  const [barHeights] = useState(() => 
-    Array.from({ length: 12 }, () => Math.random() * 40 + 30)
+  // Memoize bar heights to avoid regeneration on every render
+  const barHeights = useMemo(() => 
+    Array.from({ length: 12 }, () => Math.random() * 40 + 30),
+    []
   );
   
-  const bars = barHeights.map((height, i) => (
-    <div
-      key={i}
-      className={`waveform-bar ${isPlaying ? 'animate' : ''}`}
-      style={{
-        height: `${height}%`,
-        animationDelay: `${i * 0.1}s`,
-        animationDirection: i % 2 === 0 ? 'normal' : 'reverse',
-      }}
-    />
-  ));
+  // Memoize bars to avoid recreation on every render
+  const bars = useMemo(() => 
+    barHeights.map((height, i) => (
+      <div
+        key={i}
+        className={`waveform-bar ${isPlaying ? 'animate' : ''}`}
+        style={{
+          height: `${height}%`,
+          animationDelay: `${i * 0.1}s`,
+          animationDirection: i % 2 === 0 ? 'normal' : 'reverse',
+        }}
+      />
+    )),
+    [barHeights, isPlaying]
+  );
 
   if (!isPlaying) return null;
 
@@ -75,6 +80,6 @@ function WaveformPlayer({ isPlaying, duration, onTimeUpdate }: WaveformPlayerPro
       )}
     </div>
   );
-}
+});
 
 export default WaveformPlayer; 

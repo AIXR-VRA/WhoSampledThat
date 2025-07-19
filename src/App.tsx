@@ -6,11 +6,28 @@ import InfoDropdown from './components/InfoDropdown';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { LogOut, AlertTriangle, Trophy, Sparkles } from 'lucide-react';
-import { useState } from 'react';
+import { useState, memo, useMemo } from 'react';
 import logoImage from './assets/who sampled that logo small.png';
 
 // Background component with floating musical notes and gradient
-function AnimatedBackground() {
+const AnimatedBackground = memo(() => {
+  // Optimize for mobile - reduce number of floating elements
+  const musicalNotes = useMemo(() => [
+    // Essential notes for all screen sizes
+    { id: 1, symbol: '♪', className: 'absolute top-20 left-10 text-8xl opacity-12 animate-float-1 y2k-note-purple', delay: '0s' },
+    { id: 2, symbol: '♫', className: 'absolute top-1/4 right-16 text-9xl opacity-10 animate-float-2 y2k-note-cyan', delay: '0s' },
+    { id: 3, symbol: '♬', className: 'absolute bottom-32 left-1/4 text-7xl opacity-15 animate-float-3 y2k-note-pink', delay: '0s' },
+    { id: 4, symbol: '♩', className: 'absolute top-1/3 left-1/2 text-6xl opacity-13 animate-float-4 y2k-note-lime', delay: '0s' },
+    
+    // Additional notes for larger screens
+    { id: 5, symbol: '♯', className: 'absolute bottom-20 right-32 text-8xl opacity-11 animate-float-5 y2k-note-orange hidden sm:block', delay: '0s' },
+    { id: 6, symbol: '♭', className: 'absolute top-16 right-1/4 text-7xl opacity-14 animate-float-6 y2k-note-blue hidden sm:block', delay: '0s' },
+    { id: 7, symbol: '♮', className: 'absolute bottom-1/3 right-1/3 text-6xl opacity-12 animate-float-1 y2k-note-magenta hidden md:block', delay: '2s' },
+    { id: 8, symbol: '𝄞', className: 'absolute top-1/2 left-16 text-9xl opacity-8 animate-float-2 y2k-note-gold hidden md:block', delay: '4s' },
+    { id: 9, symbol: '𝄢', className: 'absolute bottom-16 left-1/2 text-8xl opacity-13 animate-float-3 y2k-note-teal hidden lg:block', delay: '1s' },
+    { id: 10, symbol: '𝄪', className: 'absolute top-2/3 right-20 text-5xl opacity-16 animate-float-4 y2k-note-lavender hidden lg:block', delay: '3s' },
+  ], []);
+
   return (
     <>
       {/* Dark blurred changing gradient background */}
@@ -20,61 +37,21 @@ function AnimatedBackground() {
         <div className="absolute inset-0 backdrop-blur-xl bg-black/70"></div>
       </div>
       
-      {/* Large floating musical notes */}
+      {/* Optimized floating musical notes */}
       <div className="fixed inset-0 -z-10 overflow-hidden">
-        {/* Musical Note 1 - Quarter Note */}
-        <div className="absolute top-20 left-10 text-8xl opacity-12 animate-float-1 y2k-note-purple">
-          ♪
-        </div>
-        
-        {/* Musical Note 2 - Beamed Eighth Notes */}
-        <div className="absolute top-1/4 right-16 text-9xl opacity-10 animate-float-2 y2k-note-cyan">
-          ♫
-        </div>
-        
-        {/* Musical Note 3 - Multiple Beamed Notes */}
-        <div className="absolute bottom-32 left-1/4 text-7xl opacity-15 animate-float-3 y2k-note-pink">
-          ♬
-        </div>
-        
-        {/* Musical Note 4 - Filled Note Head */}
-        <div className="absolute top-1/3 left-1/2 text-6xl opacity-13 animate-float-4 y2k-note-lime">
-          ♩
-        </div>
-        
-        {/* Musical Note 5 - Sharp Symbol */}
-        <div className="absolute bottom-20 right-32 text-8xl opacity-11 animate-float-5 y2k-note-orange">
-          ♯
-        </div>
-        
-        {/* Musical Note 6 - Flat Symbol */}
-        <div className="absolute top-16 right-1/4 text-7xl opacity-14 animate-float-6 y2k-note-blue">
-          ♭
-        </div>
-        
-        {/* Musical Note 7 - Natural Symbol */}
-        <div className="absolute bottom-1/3 right-1/3 text-6xl opacity-12 animate-float-1 y2k-note-magenta" style={{animationDelay: '2s'}}>
-          ♮
-        </div>
-        
-        {/* Musical Note 8 - Treble Clef */}
-        <div className="absolute top-1/2 left-16 text-9xl opacity-8 animate-float-2 y2k-note-gold" style={{animationDelay: '4s'}}>
-          𝄞
-        </div>
-        
-        {/* Musical Note 9 - Bass Clef */}
-        <div className="absolute bottom-16 left-1/2 text-8xl opacity-13 animate-float-3 y2k-note-teal" style={{animationDelay: '1s'}}>
-          𝄢
-        </div>
-        
-        {/* Musical Note 10 - Double Sharp */}
-        <div className="absolute top-2/3 right-20 text-5xl opacity-16 animate-float-4 y2k-note-lavender" style={{animationDelay: '3s'}}>
-          𝄪
-        </div>
+        {musicalNotes.map((note) => (
+          <div 
+            key={note.id}
+            className={note.className}
+            style={{ animationDelay: note.delay }}
+          >
+            {note.symbol}
+          </div>
+        ))}
       </div>
     </>
   );
-}
+});
 
 function FinalScoresLeaderboard() {
   const { players, resetScores, startGame, resetGame } = useGame();

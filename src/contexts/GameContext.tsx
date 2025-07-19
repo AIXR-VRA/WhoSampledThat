@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, type ReactNode, useEffect, useCallback, useMemo } from 'react';
 import tracklist from '../data/tracklist.json';
 import {
   saveGameState,
@@ -181,6 +181,12 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     saveTutorialState(false);
   }, []);
 
+  // Memoize expensive computations
+  const currentTrack = useMemo(() => 
+    tracks[currentRound - 1] || null, 
+    [tracks, currentRound]
+  );
+
   const value = {
     players,
     addPlayer,
@@ -191,7 +197,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     startGame,
     endGame,
     currentRound,
-    currentTrack: tracks[currentRound - 1] || null,
+    currentTrack,
     nextRound,
     previousRound,
     settings,
