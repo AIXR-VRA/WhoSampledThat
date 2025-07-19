@@ -2,6 +2,18 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     
+    // Handle CORS preflight requests
+    if (request.method === 'OPTIONS') {
+      return new Response(null, {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type',
+          'Access-Control-Max-Age': '86400'
+        }
+      });
+    }
+    
     // Handle share page with dynamic meta tags
     if (url.pathname.startsWith('/share/')) {
       return handleSharePage(request, env);
@@ -38,7 +50,10 @@ async function serveFallbackImage(request, env) {
         'Content-Type': 'image/png',
         'Cache-Control': 'public, max-age=3600',
         'X-Content-Type-Options': 'nosniff',
-        'X-Fallback-Image': 'true'
+        'X-Fallback-Image': 'true',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Headers': 'Content-Type'
       }
     });
   } catch (error) {
@@ -230,7 +245,10 @@ async function handleShareImage(request, env) {
         'Cache-Control': 'public, max-age=3600', // Cache for 1 hour
         'X-Content-Type-Options': 'nosniff',
         'X-Generated-At': new Date().toISOString(),
-        'X-Format-Used': 'square'
+        'X-Format-Used': 'square',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Headers': 'Content-Type'
       }
     });
     

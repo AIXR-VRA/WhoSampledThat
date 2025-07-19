@@ -69,6 +69,8 @@ async function generateShareId(scoresData: Array<{name: string, score: number, p
 
 function FinalScoresLeaderboard() {
   const { players, resetScores, startGame, resetGame } = useGame();
+  const [shareImageUrl, setShareImageUrl] = useState<string>('');
+  const [imageLoading, setImageLoading] = useState(true);
   
   // Sort players by score in descending order
   const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
@@ -84,11 +86,10 @@ function FinalScoresLeaderboard() {
   // Find the highest score to determine winners
   const highestScore = sortedPlayers.length > 0 ? sortedPlayers[0].score : 0;
   const winners = sortedPlayers.filter(player => player.score === highestScore);
-  const isWinner = (playerId: number) => winners.some(winner => winner.id === playerId);
   
-  // Update URL to share URL when component mounts
+  // Generate share image URL and update browser URL
   useEffect(() => {
-    const updateUrlToShareUrl = async () => {
+    const updateUrlAndImage = async () => {
       const top3Players = playersWithPositions.slice(0, 3);
       const scoresData = top3Players.map(player => ({
         name: player.name,
@@ -98,12 +99,16 @@ function FinalScoresLeaderboard() {
       
       const shareId = await generateShareId(scoresData);
       const shareUrl = `/share/${shareId}`;
+      const imageUrl = `https://whosampledthat.com/api/share-image/${shareId}`;
       
       // Update the browser URL without reloading the page
       window.history.replaceState(null, '', shareUrl);
+      
+      // Set the share image URL
+      setShareImageUrl(imageUrl);
     };
     
-    updateUrlToShareUrl();
+    updateUrlAndImage();
   }, [playersWithPositions]);
   
   const handlePlayAgain = () => {
@@ -152,13 +157,13 @@ function FinalScoresLeaderboard() {
     }
   };
 
-  const getPositionDisplay = (position: number) => {
-    switch (position) {
-      case 1: return '🥇';
-      case 2: return '🥈';
-      case 3: return '🥉';
-      default: return `#${position}`;
-    }
+  const handleImageLoad = () => {
+    setImageLoading(false);
+  };
+
+  const handleImageError = () => {
+    setImageLoading(false);
+    console.error('Failed to load share image');
   };
 
   return (
@@ -173,39 +178,32 @@ function FinalScoresLeaderboard() {
       </div>
       
       <div className="modern-card p-8 shadow-2xl relative z-10">
-        <div className="space-y-6">
-          {playersWithPositions.map((player) => (
-            <div 
-              key={player.id} 
-              className={`player-card p-6 relative overflow-hidden ${
-                isWinner(player.id) ? 'ring-2 ring-yellow-400' : ''
-              }`}
-            >
-              {/* Winner glow effect */}
-              {isWinner(player.id) && (
-                <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/10 to-orange-400/10 rounded-20"></div>
-              )}
-              
-              <div className="flex items-center justify-between relative z-10">
-                <div className="flex items-center gap-6">
-                  <div className="text-4xl font-black min-w-[60px]">
-                    {getPositionDisplay(player.position)}
-                  </div>
-                  <div className="text-left">
-                    <h3 className="text-2xl font-black text-white">{player.name}</h3>
-                    {isWinner(player.id) && <p className="text-yellow-400 font-bold text-sm">🎊 WINNER! 🎊</p>}
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-4xl font-black text-white">{player.score}</div>
-                  <div className="text-sm text-gray-400 font-semibold">points</div>
-                </div>
-              </div>
+        {/* Share Image Display */}
+        <div className="mb-8 text-center">
+          {imageLoading && shareImageUrl && (
+            <div className="w-full max-w-md mx-auto aspect-square bg-gray-800 rounded-20 flex items-center justify-center">
+              <div className="text-gray-400">Loading leaderboard...</div>
             </div>
-          ))}
+          )}
+          {shareImageUrl && (
+            <img
+              src={shareImageUrl}
+              alt="Game Results Leaderboard"
+              className={`w-full max-w-md mx-auto rounded-20 shadow-lg transition-opacity duration-300 ${
+                imageLoading ? 'opacity-0' : 'opacity-100'
+              }`}
+              onLoad={handleImageLoad}
+              onError={handleImageError}
+            />
+          )}
+          {!shareImageUrl && !imageLoading && (
+            <div className="w-full max-w-md mx-auto aspect-square bg-gray-800 rounded-20 flex items-center justify-center">
+              <div className="text-gray-400">Unable to load leaderboard image</div>
+            </div>
+          )}
         </div>
         
-        <div className="mt-10 flex justify-center gap-4 flex-wrap">
+        <div className="flex justify-center gap-4 flex-wrap">
           <Button 
             onClick={handleShare}
             className="modern-button warning px-6 py-4 text-lg font-bold flex items-center gap-2"
