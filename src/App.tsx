@@ -6,7 +6,7 @@ import InfoDropdown from './components/InfoDropdown';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { LogOut, AlertTriangle, Trophy, Sparkles, Share2 } from 'lucide-react';
-import { useState, memo, useMemo } from 'react';
+import { useState, memo, useMemo, useEffect } from 'react';
 import logoImage from './assets/who sampled that logo small.png';
 
 // Background component with floating musical notes and gradient
@@ -86,31 +86,48 @@ function FinalScoresLeaderboard() {
   const winners = sortedPlayers.filter(player => player.score === highestScore);
   const isWinner = (playerId: number) => winners.some(winner => winner.id === playerId);
   
+  // Update URL to share URL when component mounts
+  useEffect(() => {
+    const updateUrlToShareUrl = async () => {
+      const top3Players = playersWithPositions.slice(0, 3);
+      const scoresData = top3Players.map(player => ({
+        name: player.name,
+        score: player.score,
+        position: player.position
+      }));
+      
+      const shareId = await generateShareId(scoresData);
+      const shareUrl = `/share/${shareId}`;
+      
+      // Update the browser URL without reloading the page
+      window.history.replaceState(null, '', shareUrl);
+    };
+    
+    updateUrlToShareUrl();
+  }, [playersWithPositions]);
+  
   const handlePlayAgain = () => {
+    // Reset URL back to homepage
+    window.history.replaceState(null, '', '/');
     resetScores();
     startGame();
   };
 
   const handleNewGame = () => {
+    // Reset URL back to homepage
+    window.history.replaceState(null, '', '/');
     resetGame();
   };
 
   const handleShare = async () => {
+    // Since the current URL is already the share URL, just use it
+    const currentUrl = window.location.href;
+    
     const top3Players = playersWithPositions.slice(0, 3);
-    const scoresData = top3Players.map(player => ({
-      name: player.name,
-      score: player.score,
-      position: player.position
-    }));
-    
-    // Generate a short, clean share ID from the score data
-    const shareId = await generateShareId(scoresData);
-    const shareUrl = `${window.location.origin}?scores=${shareId}`;
-    
     const shareData = {
       title: 'Who Sampled That? - Game Results! 🎵',
       text: `Check out these amazing scores from our music party game! ${top3Players.map(p => `${p.name}: ${p.score} pts`).join(', ')}`,
-      url: shareUrl
+      url: currentUrl
     };
 
     try {
@@ -118,13 +135,13 @@ function FinalScoresLeaderboard() {
         await navigator.share(shareData);
       } else {
         // Fallback to copying URL
-        await navigator.clipboard.writeText(`${shareData.text}\n\nPlay at: ${shareUrl}`);
+        await navigator.clipboard.writeText(`${shareData.text}\n\nPlay at: ${currentUrl}`);
         // You could show a toast notification here
         alert('Game results copied to clipboard! 📋');
       }
     } catch {
       // Fallback for any sharing errors
-      const shareText = `${shareData.text}\n\nPlay at: ${shareUrl}`;
+      const shareText = `${shareData.text}\n\nPlay at: ${currentUrl}`;
       try {
         await navigator.clipboard.writeText(shareText);
         alert('Game results copied to clipboard! 📋');

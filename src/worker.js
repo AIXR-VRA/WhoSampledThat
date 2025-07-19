@@ -2,15 +2,15 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     
+    // Handle share page with dynamic meta tags
+    if (url.pathname.startsWith('/share/')) {
+      return handleSharePage(request, env);
+    }
+    
     // Handle share image generation with detailed logging
     if (url.pathname.startsWith('/api/share-image/')) {
       console.log('🖼️ OG_IMAGE_REQUEST:', url.pathname, 'from:', request.headers.get('User-Agent'));
       return handleShareImage(request, env);
-    }
-    
-    // Handle homepage with scores parameter for OG meta tags
-    if (url.pathname === '/' && url.searchParams.has('scores')) {
-      return handleHomepageWithScores(request, env);
     }
     
     // Default to serving static assets
@@ -51,34 +51,36 @@ function decodeShareId(shareId) {
   }
 }
 
-async function handleHomepageWithScores(request, env) {
+async function handleSharePage(request, env) {
   try {
     const url = new URL(request.url);
-    const shareId = url.searchParams.get('scores');
+    const shareId = url.pathname.split('/share/')[1];
     
     if (!shareId) {
-      // No scores parameter, serve normal homepage
+      // No share ID provided, serve normal homepage
       return env.ASSETS.fetch(request);
     }
     
     const scores = decodeShareId(shareId);
     if (!scores) {
-      // Invalid scores parameter, serve normal homepage
+      // Invalid share ID, serve normal homepage
       return env.ASSETS.fetch(request);
     }
     
-    // Get the normal homepage
-    const homepageResponse = await env.ASSETS.fetch(request);
+    // Get the normal homepage HTML
+    const homepageResponse = await env.ASSETS.fetch(new Request(url.origin, { 
+      method: 'GET',
+      headers: request.headers
+    }));
+    
     if (!homepageResponse.ok) {
       return homepageResponse;
     }
     
     let html = await homepageResponse.text();
     
-    // Generate dynamic OG image URL
+    // Generate dynamic meta tags for this specific share
     const imageUrl = `${url.origin}/api/share-image/${shareId}`;
-    
-    // Create dynamic title and description
     const top3Text = scores.slice(0, 3).map((p, i) => {
       const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉';
       return `${medal} ${p.name}: ${p.score} pts`;
@@ -87,9 +89,9 @@ async function handleHomepageWithScores(request, env) {
     const title = `Who Sampled That? - Game Results! 🎵`;
     const description = `Check out these amazing scores: ${top3Text}`;
     
-    // Inject dynamic meta tags into the homepage HTML
-    const metaTags = `
-    <!-- Dynamic Open Graph tags for shared scores -->
+    // Create the dynamic meta tags
+    const dynamicMetaTags = `
+    <!-- Dynamic Open Graph tags for this specific share -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="${url.href}">
     <meta property="og:title" content="${title}">
@@ -105,8 +107,9 @@ async function handleHomepageWithScores(request, env) {
     <meta name="twitter:description" content="${description}">
     <meta name="twitter:image" content="${imageUrl}">`;
     
-    // Insert the meta tags before the closing </head> tag
-    html = html.replace('</head>', `${metaTags}\n</head>`);
+    // Insert the dynamic meta tags into the HTML
+    // Look for the closing </head> tag and insert before it
+    html = html.replace('</head>', `${dynamicMetaTags}\n</head>`);
     
     return new Response(html, {
       headers: {
@@ -116,7 +119,7 @@ async function handleHomepageWithScores(request, env) {
     });
     
   } catch (error) {
-    console.error('Error handling homepage with scores:', error);
+    console.error('Error generating share page:', error);
     // Fallback to normal homepage
     return env.ASSETS.fetch(request);
   }
