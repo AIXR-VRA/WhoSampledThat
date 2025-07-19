@@ -18,6 +18,35 @@ export default {
   },
 };
 
+// Serve the fallback share image
+async function serveFallbackImage(request, env) {
+  try {
+    console.log('🔄 OG_SERVING_FALLBACK_IMAGE: social-share-card-normal.png');
+    
+    const fallbackImageRequest = new Request(new URL('/social-share-card-normal.png', request.url));
+    const fallbackImageResponse = await env.ASSETS.fetch(fallbackImageRequest);
+    
+    if (!fallbackImageResponse.ok) {
+      console.error('❌ OG_FALLBACK_IMAGE_NOT_FOUND');
+      return new Response('Fallback image not found', { status: 404 });
+    }
+    
+    console.log('✅ OG_FALLBACK_IMAGE_SERVED');
+    
+    return new Response(fallbackImageResponse.body, {
+      headers: {
+        'Content-Type': 'image/png',
+        'Cache-Control': 'public, max-age=3600',
+        'X-Content-Type-Options': 'nosniff',
+        'X-Fallback-Image': 'true'
+      }
+    });
+  } catch (error) {
+    console.error('❌ OG_FALLBACK_ERROR:', error);
+    return new Response('Error serving fallback image', { status: 500 });
+  }
+}
+
 // Decode share ID back to score data
 function decodeShareId(shareId) {
   try {
@@ -162,14 +191,14 @@ async function handleShareImage(request, env) {
     const shareId = url.pathname.split('/api/share-image/')[1];
     
     if (!shareId) {
-      console.error('❌ OG_MISSING_SHARE_ID');
-      return new Response('Missing share ID', { status: 400 });
+      console.error('❌ OG_MISSING_SHARE_ID - using fallback');
+      return await serveFallbackImage(request, env);
     }
     
     const scores = decodeShareId(shareId);
     if (!scores) {
-      console.error('❌ OG_INVALID_SHARE_ID:', shareId);
-      return new Response('Invalid share ID', { status: 400 });
+      console.error('❌ OG_INVALID_SHARE_ID:', shareId, '- using fallback');
+      return await serveFallbackImage(request, env);
     }
     
     // Always use square image format for better compatibility
@@ -208,7 +237,8 @@ async function handleShareImage(request, env) {
   } catch (error) {
     console.error('❌ OG_CRITICAL_ERROR:', error);
     console.error('❌ OG_ERROR_STACK:', error.stack);
-    return new Response('Error generating image', { status: 500 });
+    console.log('🔄 OG_USING_FALLBACK_DUE_TO_ERROR');
+    return await serveFallbackImage(request, env);
   }
 }
 
@@ -338,10 +368,9 @@ async function generateShareImage(baseImageBuffer, scores) {
     return await response.arrayBuffer();
   } catch (error) {
     console.error('❌ OG_WORKERS_OG_ERROR:', error);
-    console.log('🔄 OG_FALLBACK_TO_SIMPLE_PNG');
+    console.log('🔄 OG_FALLBACK_TO_NORMAL_SHARE_CARD');
     
-    // Fallback: return the original base image without modifications
-    console.log('✅ OG_FALLBACK_BASE_IMAGE_RETURNED');
-    return baseImageBuffer;
+    // Fallback: return the normal share card image instead of base image
+    throw error; // Re-throw to trigger main fallback handler
   }
 } 
