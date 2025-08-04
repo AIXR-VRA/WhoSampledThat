@@ -1,6 +1,8 @@
-# Deployment to Cloudflare Workers (Static Assets)
+# Deployment to Cloudflare Workers (Maintainers Only)
 
-This project is configured to automatically deploy to Cloudflare Workers using Static Assets and GitHub Actions.
+> ⚠️ **Note**: This documentation is for project maintainers only. Contributors don't need deployment access.
+
+This project is configured to automatically deploy to Cloudflare Workers using Static Assets and GitHub Actions. The deployment is secured to only work from the original repository, not from forks.
 
 ## Setup Instructions
 
@@ -29,7 +31,9 @@ This project is configured to automatically deploy to Cloudflare Workers using S
 
 ### 3. Deploy
 
-Once the secrets are configured, any push to the `master` or `main` branch will trigger an automatic deployment.
+Once the secrets are configured, any push to the `master` or `main` branch **from the original repository** will trigger an automatic deployment.
+
+**Security Note**: The GitHub Actions workflow includes a repository check (`github.repository == 'AIXR-VRA/PersonalApps'`) to prevent deployments from forks.
 
 Your app will be available at: `https://whosampledthat.com`
 
@@ -58,6 +62,13 @@ wrangler deploy
 - **Build output**: `dist` directory (configured in wrangler.toml)
 - **SPA routing**: Enabled for React Router support
 - **Custom domain**: Configured to serve from whosampledthat.com
+
+## Security for Open Source
+
+- **Repository Check**: Deployment only works from `AIXR-VRA/PersonalApps`, not from forks
+- **Secret Protection**: GitHub secrets are only available to the original repository
+- **PR Testing**: Pull requests from forks run tests but cannot deploy
+- **Safe Contributions**: Contributors can develop and test locally without deployment access
 
 ## Benefits of Workers Static Assets
 
