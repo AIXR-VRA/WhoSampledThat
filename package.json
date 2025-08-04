@@ -1,8 +1,18 @@
 {
-  "name": "personalapps",
-  "private": true,
-  "version": "0.0.0",
+  "name": "who-sampled-that",
+  "version": "1.0.0",
+  "description": "The Ultimate Music Party Game - Test your music knowledge by identifying original samples and the songs that use them!",
   "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AIXR-VRA/PersonalApps.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AIXR-VRA/PersonalApps/issues"
+  },
+  "homepage": "https://whosampledthat.com",
+  "keywords": ["music", "game", "samples", "party-game", "react", "typescript", "cloudflare-workers"],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

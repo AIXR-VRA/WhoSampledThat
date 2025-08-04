@@ -52,6 +52,24 @@ function decodeShareId(shareId) {
   try {
     console.log('🔍 OG_DECODE_START:', shareId);
     
+    // Validate shareId format and length
+    if (!shareId || typeof shareId !== 'string') {
+      console.error('❌ OG_INVALID_SHAREID_TYPE');
+      return null;
+    }
+    
+    // Prevent path traversal and limit length
+    if (shareId.includes('..') || shareId.includes('/') || shareId.length > 500) {
+      console.error('❌ OG_INVALID_SHAREID_FORMAT');
+      return null;
+    }
+    
+    // Only allow valid base64url characters
+    if (!/^[A-Za-z0-9_-]+$/.test(shareId)) {
+      console.error('❌ OG_INVALID_SHAREID_CHARS');
+      return null;
+    }
+    
     // Reverse the URL-safe base64 encoding
     const base64 = shareId.replace(/-/g, '+').replace(/_/g, '/');
     // Add padding if needed
@@ -63,14 +81,40 @@ function decodeShareId(shareId) {
     
     // Parse the compact format: name1:score1,name2:score2,name3:score3
     const pairs = decoded.split(',');
+    
+    // Validate decoded data length
+    if (pairs.length > 10) {
+      console.error('❌ OG_TOO_MANY_PLAYERS');
+      return null;
+    }
+    
     const result = pairs.map((pair, index) => {
       const [name, score] = pair.split(':');
+      
+      // Validate name and score
+      if (!name || !score || name.length > 50) {
+        console.error('❌ OG_INVALID_PLAYER_DATA');
+        return null;
+      }
+      
+      const parsedScore = parseInt(score, 10);
+      if (isNaN(parsedScore) || parsedScore < 0 || parsedScore > 999) {
+        console.error('❌ OG_INVALID_SCORE');
+        return null;
+      }
+      
       return {
-        name: name,
-        score: parseInt(score, 10),
+        name: name.substring(0, 30), // Truncate long names
+        score: parsedScore,
         position: index + 1
       };
-    });
+    }).filter(Boolean); // Remove any null entries
+    
+    // Ensure we have valid results
+    if (result.length === 0) {
+      console.error('❌ OG_NO_VALID_PLAYERS');
+      return null;
+    }
     
     console.log('✅ OG_DECODE_SUCCESS:', result.length, 'players');
     return result;
@@ -110,9 +154,20 @@ async function handleSharePage(request, env) {
     
     // Generate dynamic meta tags for this specific share
     const imageUrl = `${url.origin}/api/share-image/${shareId}`;
+    
+    // Sanitize and escape HTML entities in player names
+    const escapeHtml = (unsafe) => {
+      return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    };
+    
     const top3Text = scores.slice(0, 3).map((p, i) => {
       const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉';
-      return `${medal} ${p.name}: ${p.score} pts`;
+      return `${medal} ${escapeHtml(p.name)}: ${p.score} pts`;
     }).join(' | ');
     
     const title = `Who Sampled That? - Game Results! 🎵`;
