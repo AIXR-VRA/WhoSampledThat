@@ -23,7 +23,7 @@ This project is configured to automatically deploy to Cloudflare Workers using S
 
 ### 2. Configure GitHub Secrets
 
-1. Go to your GitHub repository: `https://github.com/AIXR-VRA/PersonalApps`
+1. Go to your GitHub repository: `https://github.com/AIXR-VRA/WhoSampledThat`
 2. Navigate to Settings → Secrets and variables → Actions
 3. Add these repository secrets:
    - `CLOUDFLARE_API_TOKEN`: Your Cloudflare API token
@@ -33,7 +33,7 @@ This project is configured to automatically deploy to Cloudflare Workers using S
 
 Once the secrets are configured, any push to the `master` or `main` branch **from the original repository** will trigger an automatic deployment.
 
-**Security Note**: The GitHub Actions workflow includes a repository check (`github.repository == 'AIXR-VRA/PersonalApps'`) to prevent deployments from forks.
+**Security Note**: The GitHub Actions workflow includes a repository check (`github.repository == 'AIXR-VRA/WhoSampledThat'`) to prevent deployments from forks.
 
 Your app will be available at: `https://whosampledthat.com`
 
@@ -65,7 +65,7 @@ wrangler deploy
 
 ## Security for Open Source
 
-- **Repository Check**: Deployment only works from `AIXR-VRA/PersonalApps`, not from forks
+- **Repository Check**: Deployment only works from `AIXR-VRA/WhoSampledThat`, not from forks
 - **Secret Protection**: GitHub secrets are only available to the original repository
 - **PR Testing**: Pull requests from forks run tests but cannot deploy
 - **Safe Contributions**: Contributors can develop and test locally without deployment access

@@ -14,8 +14,8 @@ We love your input! We want to make contributing to "Who Sampled That?" as easy 
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/PersonalApps.git
-   cd PersonalApps
+   git clone https://github.com/YOUR_USERNAME/WhoSampledThat.git
+cd WhoSampledThat
    ```
 3. **Install dependencies**:
    ```bash

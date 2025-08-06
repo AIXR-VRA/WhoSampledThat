@@ -6,10 +6,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AIXR-VRA/PersonalApps.git"
+    "url": "https://github.com/AIXR-VRA/WhoSampledThat.git"
   },
   "bugs": {
-    "url": "https://github.com/AIXR-VRA/PersonalApps/issues"
+    "url": "https://github.com/AIXR-VRA/WhoSampledThat/issues"
   },
   "homepage": "https://whosampledthat.com",
   "keywords": ["music", "game", "samples", "party-game", "react", "typescript", "cloudflare-workers"],

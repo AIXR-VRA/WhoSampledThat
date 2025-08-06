@@ -7,11 +7,11 @@
   
   *Test your music knowledge by identifying original samples and the songs that use them!*
 
-  [![Build and Deploy](https://github.com/AIXR-VRA/PersonalApps/actions/workflows/deploy.yml/badge.svg)](https://github.com/AIXR-VRA/PersonalApps/actions/workflows/deploy.yml)
+  [![Build and Deploy](https://github.com/AIXR-VRA/WhoSampledThat/actions/workflows/deploy.yml/badge.svg)](https://github.com/AIXR-VRA/WhoSampledThat/actions/workflows/deploy.yml)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
   [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
-  [![Stars](https://img.shields.io/github/stars/AIXR-VRA/PersonalApps?style=social)](https://github.com/AIXR-VRA/PersonalApps/stargazers)
-  [![Forks](https://img.shields.io/github/forks/AIXR-VRA/PersonalApps?style=social)](https://github.com/AIXR-VRA/PersonalApps/network/members)
+  [![Stars](https://img.shields.io/github/stars/AIXR-VRA/WhoSampledThat?style=social)](https://github.com/AIXR-VRA/WhoSampledThat/stargazers)
+  [![Forks](https://img.shields.io/github/forks/AIXR-VRA/WhoSampledThat?style=social)](https://github.com/AIXR-VRA/WhoSampledThat/network/members)
 </div>
 
 ## 🎮 About the Game
@@ -142,7 +142,7 @@ npx wrangler publish # Deploy to Cloudflare Workers
 ## 📁 Project Structure
 
 ```
-PersonalApps/
+WhoSampledThat/
 ├── src/
 │   ├── components/          # Reusable UI components
 │   │   ├── InfoDropdown.tsx
@@ -271,7 +271,7 @@ The generated images work seamlessly with:
 ### File Structure for OG Generation
 
 ```
-PersonalApps/
+WhoSampledThat/
 ├── src/worker.js              # Main worker with OG generation logic
 ├── public/
 │   └── social-share-card-base-square.png  # Base image template
@@ -320,7 +320,7 @@ We welcome contributions from the community! Whether you're a developer, musicia
 
 ### Getting Started
 1. **Fork** the repository
-2. **Clone** your fork: `git clone https://github.com/YOUR_USERNAME/PersonalApps.git`
+2. **Clone** your fork: `git clone https://github.com/YOUR_USERNAME/WhoSampledThat.git`
 3. **Install dependencies**: `npm install`
 4. **Start developing**: `npm run dev` (runs locally at `http://localhost:5173`)
 5. **Test your changes** thoroughly in your local environment
@@ -333,7 +333,7 @@ For detailed contribution guidelines, please see [CONTRIBUTING.md](CONTRIBUTING.
 ### 🌟 Community & Support
 
 - **⭐ Star the project** if you find it useful
-- **🐛 Report bugs** via [GitHub Issues](https://github.com/AIXR-VRA/PersonalApps/issues)
+- **🐛 Report bugs** via [GitHub Issues](https://github.com/AIXR-VRA/WhoSampledThat/issues)
 - **💡 Request features** or discuss ideas
 - **🤝 Join discussions** and help other contributors
 
@@ -381,7 +381,7 @@ This means you can freely use, modify, and distribute this project, even for com
   
   <br><br>
   
-  **[🎮 Play Live Game](http://whosampledthat.com/)** | **[📱 Mobile Optimized](http://whosampledthat.com/)** | **[🤝 Contribute on GitHub](https://github.com/AIXR-VRA/PersonalApps)**
+  **[🎮 Play Live Game](http://whosampledthat.com/)** | **[📱 Mobile Optimized](http://whosampledthat.com/)** | **[🤝 Contribute on GitHub](https://github.com/AIXR-VRA/WhoSampledThat)**
   
   <br>
   
